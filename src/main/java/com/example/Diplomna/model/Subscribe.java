@@ -3,11 +3,10 @@ package com.example.Diplomna.model;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
-import java.text.DateFormat;
 import java.time.LocalDateTime;
 
 @Entity
-public class Unsubscribe implements Serializable {
+public class Subscribe implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false,updatable = false)
