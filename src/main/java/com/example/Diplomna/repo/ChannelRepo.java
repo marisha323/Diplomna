@@ -1,4 +1,7 @@
 package com.example.Diplomna.repo;
 
-public interface ChannelRepo {
+import com.example.Diplomna.model.Channel;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ChannelRepo extends JpaRepository<Channel,Long> {
 }
