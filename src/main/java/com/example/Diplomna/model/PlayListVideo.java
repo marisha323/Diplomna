@@ -10,6 +10,49 @@ public class PlayListVideo implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false,updatable = false)
     private Long id;
-    private Long PlayListId;
-    private Long VideoId;
+    @ManyToOne
+    @JoinColumn(name = "playListId")
+    private PlayList playList;
+    @ManyToOne
+    @JoinColumn(name = "videoId")
+    private Video video;
+
+    @Override
+    public String toString() {
+        return "PlayListVideo{" +
+                "id=" + id +
+                ", playList=" + playList +
+                ", video=" + video +
+                '}';
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public PlayList getPlayList() {
+        return playList;
+    }
+
+    public void setPlayList(PlayList playList) {
+        this.playList = playList;
+    }
+
+    public Video getVideo() {
+        return video;
+    }
+
+    public void setVideo(Video video) {
+        this.video = video;
+    }
+
+    public PlayListVideo(Long id, PlayList playList, Video video) {
+        this.id = id;
+        this.playList = playList;
+        this.video = video;
+    }
 }

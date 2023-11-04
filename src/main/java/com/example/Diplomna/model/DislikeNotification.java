@@ -9,5 +9,9 @@ public class DislikeNotification implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false,updatable = false)
     private Long id;
-    private Long dislikeId;
+    @ManyToOne
+    @JoinColumn(name = "dislikeId")
+    private DisLike disLike;
+
+
 }

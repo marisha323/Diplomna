@@ -9,5 +9,7 @@ public class UnsubscribeNotification implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false,updatable = false)
     private Long id;
-    private Long unsubscribeId;
+    @ManyToOne
+    @JoinColumn(name = "unsubscribeId")
+    private Unsubscribe unsubscribe;
 }

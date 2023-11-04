@@ -13,6 +13,10 @@ public class User implements Serializable {
     private String userName;
     private String email;
     private String password;
-    private Long logoId;
+    ////??????????
+//    @ManyToOne
+//    @JoinColumn(name = "unsubscribeId")
+//    private Unsubscribe unsubscribe;
+//    private Long logoId;
     private boolean isActivated;
 }

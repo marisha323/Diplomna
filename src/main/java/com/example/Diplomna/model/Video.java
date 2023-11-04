@@ -12,8 +12,16 @@ public class Video implements Serializable {
     private String title;
     private String description;
     private String path;
-    private Long ownerId;
-    private Long accessStatusId;
-    private Long previewId;
+    @ManyToOne
+    @JoinColumn(name = "ownerId")
+    private User user;
+    @ManyToOne
+    @JoinColumn(name = "accessStatusId")
+    private AccessStatus accessStatus;
+//?????????
+    //    @ManyToOne
+//    @JoinColumn(name = "previewId")
+//    private User user;
+//    private Long previewId;
     private Long views;
 }

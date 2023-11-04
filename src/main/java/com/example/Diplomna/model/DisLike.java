@@ -11,7 +11,60 @@ public class DisLike implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false,updatable = false)
     private Long id;
-    private Long userId;
-    private Long videoId;
+    @ManyToOne
+    @JoinColumn(name = "userId")
+    private User user;
+    @ManyToOne
+    @JoinColumn(name = "videoId")
+    private Video video;
     private LocalDateTime dateTime;
+
+    @Override
+    public String toString() {
+        return "DisLike{" +
+                "id=" + id +
+                ", user=" + user +
+                ", video=" + video +
+                ", dateTime=" + dateTime +
+                '}';
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Video getVideo() {
+        return video;
+    }
+
+    public void setVideo(Video video) {
+        this.video = video;
+    }
+
+    public LocalDateTime getDateTime() {
+        return dateTime;
+    }
+
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    public DisLike(Long id, User user, Video video, LocalDateTime dateTime) {
+        this.id = id;
+        this.user = user;
+        this.video = video;
+        this.dateTime = dateTime;
+    }
 }

@@ -9,5 +9,36 @@ public class LikeNotification implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false,updatable = false)
     private Long id;
-    private Long likeId;
+    @ManyToOne
+    @JoinColumn(name = "likeId")
+    private Like like;
+
+    @Override
+    public String toString() {
+        return "LikeNotification{" +
+                "id=" + id +
+                ", like=" + like +
+                '}';
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Like getLike() {
+        return like;
+    }
+
+    public void setLike(Like like) {
+        this.like = like;
+    }
+
+    public LikeNotification(Long id, Like like) {
+        this.id = id;
+        this.like = like;
+    }
 }
