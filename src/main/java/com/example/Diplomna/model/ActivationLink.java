@@ -17,6 +17,10 @@ public class ActivationLink implements Serializable {
     @JoinColumn(name = "userId")
     private User user;
 
+    public ActivationLink() {
+
+    }
+
     @Override
     public String toString() {
         return "ActivationLink{" +
@@ -65,4 +69,5 @@ public class ActivationLink implements Serializable {
         this.link = link;
         this.user = user;
     }
+
 }
