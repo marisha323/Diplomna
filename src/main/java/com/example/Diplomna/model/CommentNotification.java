@@ -1,10 +1,11 @@
 package com.example.Diplomna.model;
 
+import com.example.Diplomna.contrscts.INotification;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
 @Entity
-public class CommentNotification implements Serializable {
+public class CommentNotification implements Serializable, INotification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

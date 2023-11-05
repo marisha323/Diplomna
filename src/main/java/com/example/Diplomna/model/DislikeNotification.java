@@ -1,10 +1,11 @@
 package com.example.Diplomna.model;
 
+import com.example.Diplomna.contrscts.INotification;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
 @Entity
-public class DislikeNotification implements Serializable {
+public class DislikeNotification implements Serializable, INotification {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false,updatable = false)
