@@ -13,10 +13,78 @@ public class User implements Serializable {
     private String userName;
     private String email;
     private String password;
-    ////??????????
-//    @ManyToOne
-//    @JoinColumn(name = "unsubscribeId")
-//    private Unsubscribe unsubscribe;
-//    private Long logoId;
+
+    @OneToOne
+    @JoinColumn(name = "logoId")
+    private File file;
     private boolean isActivated;
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", userName='" + userName + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", file=" + file +
+                ", isActivated=" + isActivated +
+                '}';
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public File getFile() {
+        return file;
+    }
+
+    public void setFile(File file) {
+        this.file = file;
+    }
+
+    public boolean isActivated() {
+        return isActivated;
+    }
+
+    public void setActivated(boolean activated) {
+        isActivated = activated;
+    }
+
+    public User(Long id, String userName, String email, String password, File file, boolean isActivated) {
+        this.id = id;
+        this.userName = userName;
+        this.email = email;
+        this.password = password;
+        this.file = file;
+        this.isActivated = isActivated;
+    }
 }

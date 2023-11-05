@@ -12,4 +12,33 @@ public class UnsubscribeNotification implements Serializable {
     @ManyToOne
     @JoinColumn(name = "unsubscribeId")
     private Unsubscribe unsubscribe;
+
+    @Override
+    public String toString() {
+        return "UnsubscribeNotification{" +
+                "id=" + id +
+                ", unsubscribe=" + unsubscribe +
+                '}';
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Unsubscribe getUnsubscribe() {
+        return unsubscribe;
+    }
+
+    public void setUnsubscribe(Unsubscribe unsubscribe) {
+        this.unsubscribe = unsubscribe;
+    }
+
+    public UnsubscribeNotification(Long id, Unsubscribe unsubscribe) {
+        this.id = id;
+        this.unsubscribe = unsubscribe;
+    }
 }

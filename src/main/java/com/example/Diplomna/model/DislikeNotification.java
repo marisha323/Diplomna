@@ -13,5 +13,32 @@ public class DislikeNotification implements Serializable {
     @JoinColumn(name = "dislikeId")
     private DisLike disLike;
 
+    @Override
+    public String toString() {
+        return "DislikeNotification{" +
+                "id=" + id +
+                ", disLike=" + disLike +
+                '}';
+    }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public DisLike getDisLike() {
+        return disLike;
+    }
+
+    public void setDisLike(DisLike disLike) {
+        this.disLike = disLike;
+    }
+
+    public DislikeNotification(Long id, DisLike disLike) {
+        this.id = id;
+        this.disLike = disLike;
+    }
 }

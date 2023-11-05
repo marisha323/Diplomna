@@ -1,5 +1,6 @@
 package com.example.Diplomna.model;
 
+import com.example.Diplomna.contrscts.INotification;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -15,18 +16,25 @@ public class Notification implements Serializable {
     @ManyToOne
     @JoinColumn(name = "targetUserId")
     private User user;
-    //@ManyToOne
-//    @JoinColumn(name = "notificationTypeId")
-//    private Notification notification;
-//    private Long targetUserId;
-//    private Long notificationTypeId;
+    @OneToMany
+    @JoinColumn(name = "notificationType")
+    private INotification notification;
+
     private boolean isNew;
+
+    public Notification(Long id, User user, INotification notification, boolean isNew) {
+        this.id = id;
+        this.user = user;
+        this.notification = notification;
+        this.isNew = isNew;
+    }
 
     @Override
     public String toString() {
         return "Notification{" +
                 "id=" + id +
                 ", user=" + user +
+                ", notification=" + notification +
                 ", isNew=" + isNew +
                 '}';
     }
@@ -47,17 +55,19 @@ public class Notification implements Serializable {
         this.user = user;
     }
 
+    public INotification getNotification() {
+        return notification;
+    }
+
+    public void setNotification(INotification notification) {
+        this.notification = notification;
+    }
+
     public boolean isNew() {
         return isNew;
     }
 
     public void setNew(boolean aNew) {
         isNew = aNew;
-    }
-
-    public Notification(Long id, User user, boolean isNew) {
-        this.id = id;
-        this.user = user;
-        this.isNew = isNew;
     }
 }

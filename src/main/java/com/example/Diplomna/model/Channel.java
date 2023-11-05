@@ -13,14 +13,16 @@ public class Channel implements Serializable {
     @OneToOne
     @JoinColumn(name = "ownerId")
     private User user;
+    @OneToOne
+    @JoinColumn(name = "logoId")
+    private File file;
 
     @Override
     public String toString() {
         return "Channel{" +
                 "id=" + id +
                 ", user=" + user +
-                ", description='" + description + '\'' +
-                ", bannerId=" + bannerId +
+                ", file=" + file +
                 '}';
     }
 
@@ -40,29 +42,17 @@ public class Channel implements Serializable {
         this.user = user;
     }
 
-    public String getDescription() {
-        return description;
+    public File getFile() {
+        return file;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setFile(File file) {
+        this.file = file;
     }
 
-    public Long getBannerId() {
-        return bannerId;
-    }
-
-    public void setBannerId(Long bannerId) {
-        this.bannerId = bannerId;
-    }
-
-    public Channel(Long id, User user, String description, Long bannerId) {
+    public Channel(Long id, User user, File file) {
         this.id = id;
         this.user = user;
-        this.description = description;
-        this.bannerId = bannerId;
+        this.file = file;
     }
-
-    private String description;
-    private Long bannerId;
 }
