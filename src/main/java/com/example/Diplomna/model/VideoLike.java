@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
-public class Like implements Serializable {
+public class VideoLike implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false,updatable = false)
@@ -61,7 +61,7 @@ public class Like implements Serializable {
         this.dateTime = dateTime;
     }
 
-    public Like(Long id, User user, Video video, LocalDateTime dateTime) {
+    public VideoLike(Long id, User user, Video video, LocalDateTime dateTime) {
         this.id = id;
         this.user = user;
         this.video = video;

@@ -1,12 +1,10 @@
 package com.example.Diplomna.model;
 
-import com.example.Diplomna.contrscts.INotification;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
-import java.lang.annotation.Target;
 
-@Entity
+
 public class Notification implements Serializable {
 
     @Id
@@ -16,25 +14,19 @@ public class Notification implements Serializable {
     @ManyToOne
     @JoinColumn(name = "targetUserId")
     private User user;
-    @OneToMany
-    @JoinColumn(name = "notificationType")
-    private INotification notification;
+
+    private String notificationType;
+    private String notificationMessage;
 
     private boolean isNew;
-
-    public Notification(Long id, User user, INotification notification, boolean isNew) {
-        this.id = id;
-        this.user = user;
-        this.notification = notification;
-        this.isNew = isNew;
-    }
 
     @Override
     public String toString() {
         return "Notification{" +
                 "id=" + id +
                 ", user=" + user +
-                ", notification=" + notification +
+                ", notificationType='" + notificationType + '\'' +
+                ", notificationMessage='" + notificationMessage + '\'' +
                 ", isNew=" + isNew +
                 '}';
     }
@@ -55,12 +47,20 @@ public class Notification implements Serializable {
         this.user = user;
     }
 
-    public INotification getNotification() {
-        return notification;
+    public String getNotificationType() {
+        return notificationType;
     }
 
-    public void setNotification(INotification notification) {
-        this.notification = notification;
+    public void setNotificationType(String notificationType) {
+        this.notificationType = notificationType;
+    }
+
+    public String getNotificationMessage() {
+        return notificationMessage;
+    }
+
+    public void setNotificationMessage(String notificationMessage) {
+        this.notificationMessage = notificationMessage;
     }
 
     public boolean isNew() {
@@ -69,5 +69,13 @@ public class Notification implements Serializable {
 
     public void setNew(boolean aNew) {
         isNew = aNew;
+    }
+
+    public Notification(Long id, User user, String notificationType, String notificationMessage, boolean isNew) {
+        this.id = id;
+        this.user = user;
+        this.notificationType = notificationType;
+        this.notificationMessage = notificationMessage;
+        this.isNew = isNew;
     }
 }
