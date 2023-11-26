@@ -11,6 +11,7 @@ public class File implements Serializable {
     @Column(nullable = false,updatable = false)
     private Long id;
     private String type;
+
     private String path;
 
     @Override
