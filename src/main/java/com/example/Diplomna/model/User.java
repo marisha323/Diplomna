@@ -13,7 +13,9 @@ public class User implements Serializable {
     private String userName;
     private String email;
     private String password;
-
+    @OneToOne
+    @JoinColumn(name = "userRoleId")
+    private UserRole userRole;
     @OneToOne
     @JoinColumn(name = "logoId")
     private File file;
@@ -26,6 +28,7 @@ public class User implements Serializable {
                 ", userName='" + userName + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", userRole=" + userRole +
                 ", file=" + file +
                 ", isActivated=" + isActivated +
                 '}';
@@ -63,6 +66,14 @@ public class User implements Serializable {
         this.password = password;
     }
 
+    public UserRole getUserRole() {
+        return userRole;
+    }
+
+    public void setUserRole(UserRole userRole) {
+        this.userRole = userRole;
+    }
+
     public File getFile() {
         return file;
     }
@@ -79,11 +90,12 @@ public class User implements Serializable {
         isActivated = activated;
     }
 
-    public User(Long id, String userName, String email, String password, File file, boolean isActivated) {
+    public User(Long id, String userName, String email, String password, UserRole userRole, File file, boolean isActivated) {
         this.id = id;
         this.userName = userName;
         this.email = email;
         this.password = password;
+        this.userRole = userRole;
         this.file = file;
         this.isActivated = isActivated;
     }

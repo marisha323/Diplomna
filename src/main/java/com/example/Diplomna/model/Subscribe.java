@@ -20,6 +20,8 @@ public class Subscribe implements Serializable {
 
     private LocalDateTime dateTime;
 
+    private boolean Unsubscribed;
+
     @Override
     public String toString() {
         return "Subscribe{" +
