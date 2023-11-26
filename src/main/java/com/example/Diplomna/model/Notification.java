@@ -16,7 +16,7 @@ public class Notification implements Serializable {
     private User user;
 
     private String notificationType;
-    private String notificationMessage;
+    private Long sourceId;
 
     private boolean isNew;
 
@@ -26,7 +26,7 @@ public class Notification implements Serializable {
                 "id=" + id +
                 ", user=" + user +
                 ", notificationType='" + notificationType + '\'' +
-                ", notificationMessage='" + notificationMessage + '\'' +
+                ", sourceId='" + sourceId + '\'' +
                 ", isNew=" + isNew +
                 '}';
     }
@@ -55,12 +55,12 @@ public class Notification implements Serializable {
         this.notificationType = notificationType;
     }
 
-    public String getNotificationMessage() {
-        return notificationMessage;
+    public Long getNotificationMessage() {
+        return sourceId;
     }
 
     public void setNotificationMessage(String notificationMessage) {
-        this.notificationMessage = notificationMessage;
+        this.sourceId = sourceId;
     }
 
     public boolean isNew() {
@@ -75,7 +75,7 @@ public class Notification implements Serializable {
         this.id = id;
         this.user = user;
         this.notificationType = notificationType;
-        this.notificationMessage = notificationMessage;
+        this.sourceId = sourceId;
         this.isNew = isNew;
     }
 }
