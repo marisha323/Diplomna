@@ -11,6 +11,9 @@ public class Hashtag implements Serializable {
     private Long id;
     private String title;
 
+    public Hashtag() {
+    }
+
     @Override
     public String toString() {
         return "Hashtag{" +

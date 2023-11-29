@@ -17,6 +17,10 @@ public class HashTagVideo implements Serializable {
     @JoinColumn(name = "videoId")
     private Video video;
 
+    public HashTagVideo() {
+
+    }
+
     @Override
     public String toString() {
         return "HashTagVideo{" +

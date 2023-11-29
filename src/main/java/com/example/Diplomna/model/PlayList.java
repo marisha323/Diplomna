@@ -17,6 +17,10 @@ public class PlayList implements Serializable {
     @JoinColumn(name = "accessStatusId")
     private AccessStatus accessStatus;
 
+    public PlayList() {
+
+    }
+
     @Override
     public String toString() {
         return "PlayList{" +

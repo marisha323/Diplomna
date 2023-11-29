@@ -17,6 +17,12 @@ public class Channel implements Serializable {
     @JoinColumn(name = "logoId")
     private File file;
 
+
+
+    public Channel() {
+
+    }
+
     @Override
     public String toString() {
         return "Channel{" +

@@ -15,6 +15,10 @@ public class RefreshToken implements Serializable {
     private User user;
     private String refreshToken;
 
+    public RefreshToken() {
+
+    }
+
     @Override
     public String toString() {
         return "RefreshToken{" +

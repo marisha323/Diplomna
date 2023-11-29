@@ -19,6 +19,10 @@ public class History implements Serializable {
     private Video video;
     private LocalDateTime dateTime;
 
+    public History() {
+        
+    }
+
     @Override
     public String toString() {
         return "History{" +
