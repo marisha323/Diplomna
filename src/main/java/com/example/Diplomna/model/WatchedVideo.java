@@ -13,18 +13,19 @@ public class WatchedVideo implements Serializable {
     private Long id;
     @ManyToOne
     @JoinColumn(name = "userId")
+
     private User user;
     @ManyToOne
     @JoinColumn(name = "videoId")
     private Video video;
 
     private int watchCount;
-    private LocalDateTime watchateTime;
-
+    private LocalDateTime watchDate;
     @ManyToOne
     @JoinColumn(name = "gradeId")
     private Grade grade;
-    private LocalDateTime gradeDateTime;
+
+    private LocalDateTime gradeDate;
 
 
 

@@ -12,6 +12,7 @@ public class User implements Serializable {
     private Long id;
     private String userName;
     private String email;
+    @Column(nullable = true)
     private String password;
     @OneToOne
     @JoinColumn(name = "userRoleId")
