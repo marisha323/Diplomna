@@ -22,6 +22,10 @@ public class User implements Serializable {
     private File file;
     private boolean isActivated;
 
+    public User() {
+
+    }
+
     @Override
     public String toString() {
         return "User{" +

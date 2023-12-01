@@ -11,6 +11,10 @@ public class AccessStatus implements Serializable {
     private Long id;
     private String status;
 
+    public AccessStatus() {
+
+    }
+
     @Override
     public String toString() {
         return "AccessStatus{" +

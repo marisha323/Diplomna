@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
-public class Subscribe implements Serializable {
+public class Subscription implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false,updatable = false)
@@ -21,6 +21,10 @@ public class Subscribe implements Serializable {
     private LocalDateTime dateTime;
 
     private boolean Unsubscribed;
+
+    public Subscription() {
+
+    }
 
     @Override
     public String toString() {
@@ -64,7 +68,7 @@ public class Subscribe implements Serializable {
         this.dateTime = dateTime;
     }
 
-    public Subscribe(Long id, User user, User user_target, LocalDateTime dateTime) {
+    public Subscription(Long id, User user, User user_target, LocalDateTime dateTime) {
         this.id = id;
         this.user = user;
         this.user_target = user_target;

@@ -20,6 +20,10 @@ public class Comment implements Serializable {
     private String text;
     private LocalDateTime dateTime;
 
+    public Comment() {
+
+    }
+
     @Override
     public String toString() {
         return "Comment{" +

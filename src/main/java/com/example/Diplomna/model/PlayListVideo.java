@@ -17,6 +17,10 @@ public class PlayListVideo implements Serializable {
     @JoinColumn(name = "videoId")
     private Video video;
 
+    public PlayListVideo() {
+
+    }
+
     @Override
     public String toString() {
         return "PlayListVideo{" +
