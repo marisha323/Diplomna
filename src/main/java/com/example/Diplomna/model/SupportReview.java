@@ -12,11 +12,14 @@ public class SupportReview implements Serializable {
     @Column(nullable = false,updatable = false)
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "userId")
     private User user;
 
     private String Theme;
+    @OneToOne
+    @JoinColumn(name = "SupportReviewStatusId")
+    private SupportReviewStatus SupportReviewStatusId;
 
     public SupportReview() {
     }
@@ -70,7 +73,5 @@ public class SupportReview implements Serializable {
         SupportReviewStatusId = supportReviewStatusId;
     }
 
-    @OneToOne
-    @JoinColumn(name = "SupportReviewStatusId")
-    private SupportReviewStatus SupportReviewStatusId;
+
 }
