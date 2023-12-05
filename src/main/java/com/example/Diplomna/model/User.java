@@ -3,6 +3,8 @@ package com.example.Diplomna.model;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.Optional;
 
 @Entity
 public class User implements Serializable {
@@ -21,6 +23,7 @@ public class User implements Serializable {
     @JoinColumn(name = "logoId")
     private File file;
     private boolean isActivated;
+    private Optional<Object> userRoles;
 
     public User() {
 
@@ -103,5 +106,16 @@ public class User implements Serializable {
         this.userRole = userRole;
         this.file = file;
         this.isActivated = isActivated;
+    }
+
+
+    private Collection<UserRole> roles;
+
+    public Optional<Object> getUserRoles() {
+        return userRoles;
+    }
+
+    public void setUserRoles(Optional<Object> userRoles) {
+        this.userRoles = userRoles;
     }
 }
