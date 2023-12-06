@@ -16,23 +16,5 @@ public class VideoController {
     {
         return "rdfigjrdifjhidh";
     }
-    @GetMapping("/unsecured")
-    public String unsecuredData() {
-        return "Unsecured data";
-    }
 
-    @GetMapping("/secured")
-    public String securedData() {
-        return "Secured data";
-    }
-
-    @GetMapping("/admin")
-    public String adminData() {
-        return "Admin data";
-    }
-
-    @GetMapping("/info")
-    public String userData(Principal principal) {
-        return principal.getName();
-    }
 }
