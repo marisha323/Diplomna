@@ -23,7 +23,6 @@ public class User implements Serializable {
     @JoinColumn(name = "logoId")
     private File file;
     private boolean isActivated;
-    private Optional<Object> userRoles;
 
     public User() {
 
@@ -109,13 +108,5 @@ public class User implements Serializable {
     }
 
 
-    private Collection<UserRole> roles;
 
-    public Optional<Object> getUserRoles() {
-        return userRoles;
-    }
-
-    public void setUserRoles(Optional<Object> userRoles) {
-        this.userRoles = userRoles;
-    }
 }
