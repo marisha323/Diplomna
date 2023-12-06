@@ -18,9 +18,9 @@ public class VideoController {
     }
 
     @GetMapping("/info")
-    public String videoData(Principal principal) //інжектимо поточного користувача через принципал
+    public String videoData() //інжектимо поточного користувача через принципал
     {
-        return principal.getName();
+        return "rdfigjrdifjhidh";
     }
 
 }
