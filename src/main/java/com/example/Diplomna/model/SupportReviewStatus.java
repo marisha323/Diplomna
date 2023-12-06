@@ -1,19 +1,24 @@
 package com.example.Diplomna.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.io.Serializable;
-
+@Entity
 public class SupportReviewStatus implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false,updatable = false)
     private Long id;
-
     private String title;
+    @OneToOne
+    @JoinColumn(name = "SupportReviewId")
+    private SupportReview SupportReviewId;
+
+    public SupportReviewStatus(Long id, String title, SupportReview supportReviewId) {
+        this.id = id;
+        this.title = title;
+        SupportReviewId = supportReviewId;
+    }
 
     public Long getId() {
         return id;
@@ -31,10 +36,20 @@ public class SupportReviewStatus implements Serializable {
         this.title = title;
     }
 
-    public SupportReviewStatus() {
+    public SupportReview getSupportReviewId() {
+        return SupportReviewId;
     }
 
-    public SupportReviewStatus(String title) {
-        this.title = title;
+    public void setSupportReviewId(SupportReview supportReviewId) {
+        SupportReviewId = supportReviewId;
+    }
+
+    @Override
+    public String toString() {
+        return "SupportReviewStatus{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", SupportReviewId=" + SupportReviewId +
+                '}';
     }
 }
