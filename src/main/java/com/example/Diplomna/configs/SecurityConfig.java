@@ -5,6 +5,7 @@ import com.example.Diplomna.services.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -17,13 +18,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
+import com.example.Diplomna.configs.JwtRequestFilter;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class SecurityConfig {
-    private UserService userService;
-    private JwtRequestFilter jwtRequestFilter;
+    private  UserService userService;
+    private  JwtRequestFilter jwtRequestFilter;
 
     @Autowired
     public void setUserService(UserService userService) {
@@ -41,9 +42,9 @@ public class SecurityConfig {
                 .csrf().disable()
                 .cors().disable()
                 .authorizeRequests()
-                .antMatchers("/secured").authenticated()
-                .antMatchers("/info").authenticated()
-                .antMatchers("/admin").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/secured").authenticated()
+                .requestMatchers(HttpMethod.GET, "/info").authenticated()
+                .requestMatchers(HttpMethod.GET, "/admin").hasRole("ADMIN")
                 .anyRequest().permitAll()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -54,13 +55,13 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Bean
-    public DaoAuthenticationProvider daoAuthenticationProvider() {
-        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-        daoAuthenticationProvider.setUserDetailsService(userService);
-        return daoAuthenticationProvider;
-    }
+//    @Bean
+//    public DaoAuthenticationProvider daoAuthenticationProvider() {
+//        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+//        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+//        daoAuthenticationProvider.setUserDetailsService(userService);
+//        return daoAuthenticationProvider;
+//    }
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
