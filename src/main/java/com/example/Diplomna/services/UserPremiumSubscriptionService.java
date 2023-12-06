@@ -1,6 +1,6 @@
 package com.example.Diplomna.services;
 
-import com.example.Diplomna.dtos.RegistrationUserDto;
+
 import com.example.Diplomna.model.User;
 import com.example.Diplomna.model.UserRole;
 import com.example.Diplomna.repo.UserPremiumSubscriptionRepo;
