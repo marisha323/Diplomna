@@ -10,6 +10,7 @@ import org.springframework.web.filter.CorsFilter;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 @SpringBootApplication
 public class DiplomnaApplication {
@@ -19,10 +20,10 @@ public class DiplomnaApplication {
 	}
 
 	@Bean
-	public CorsFilter corsFilter () {
+	public CorsFilter corsFilter() {
 		CorsConfiguration corsConfiguration = new CorsConfiguration();
 		corsConfiguration.setAllowCredentials(true);
-		corsConfiguration.setAllowedOrigins(Collections.singletonList("*"));
+		corsConfiguration.setAllowedOriginPatterns(List.of("*"));
 		corsConfiguration.setAllowedHeaders(Arrays.asList("Origin", "Access-Control-Allow-Origin",
 				"Content-Type", "Accept", "Authorization", "Origin, Accept", "X-Requested-With",
 				"Access-Control-Request-Method", "Access-Control-Request-Headers", "auth-token", "uuid"));
@@ -36,5 +37,4 @@ public class DiplomnaApplication {
 
 		return new CorsFilter(urlBasedCorsConfigurationSource);
 	}
-
 }
