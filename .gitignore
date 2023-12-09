@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+##щоб самі відео не комітились в гідхаб
+resources/videos/
