@@ -1,11 +1,15 @@
 package com.example.Diplomna.model;
 
 import jakarta.persistence.*;
+import lombok.Builder;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
+@Builder
+@Data
 public class ActivationLink implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
