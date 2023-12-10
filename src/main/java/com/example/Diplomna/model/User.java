@@ -1,13 +1,26 @@
 package com.example.Diplomna.model;
 
+import com.example.Diplomna.enums.Role;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
 
 @Entity
-public class User implements Serializable {
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class User implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false,updatable = false)
     private Long id;
     private String userName;
@@ -22,86 +35,40 @@ public class User implements Serializable {
     private File file;
     private boolean isActivated;
 
-    public User() {
 
-    }
-
+    @Enumerated (EnumType.STRING)
+    private Role role;
     @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", userName='" + userName + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", userRole=" + userRole +
-                ", file=" + file +
-                ", isActivated=" + isActivated +
-                '}';
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
     }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getEmail() {
+    @Override
+    public String getUsername() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
+    @Override
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
     }
 
-    public UserRole getUserRole() {
-        return userRole;
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
     }
 
-    public void setUserRole(UserRole userRole) {
-        this.userRole = userRole;
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
     }
 
-    public File getFile() {
-        return file;
-    }
-
-    public void setFile(File file) {
-        this.file = file;
-    }
-
-    public boolean isActivated() {
-        return isActivated;
-    }
-
-    public void setActivated(boolean activated) {
-        isActivated = activated;
-    }
-
-    public User(Long id, String userName, String email, String password, UserRole userRole, File file, boolean isActivated) {
-        this.id = id;
-        this.userName = userName;
-        this.email = email;
-        this.password = password;
-        this.userRole = userRole;
-        this.file = file;
-        this.isActivated = isActivated;
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

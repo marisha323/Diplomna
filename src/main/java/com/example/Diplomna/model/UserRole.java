@@ -10,5 +10,5 @@ public class UserRole implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false,updatable = false)
     private Long id;
-    private String type;
+    private String name;
 }
