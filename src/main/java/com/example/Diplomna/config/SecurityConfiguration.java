@@ -27,6 +27,8 @@ public class SecurityConfiguration {
                 .permitAll()
                 .requestMatchers("/api/google/**")
                 .permitAll()
+                .requestMatchers("/video/**")
+                .permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()

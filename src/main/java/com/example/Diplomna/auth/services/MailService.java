@@ -36,7 +36,7 @@ public class MailService {
             linkBuilder.append("?user_id=").append(link.getUser().getId());
             linkBuilder.append("&code=").append(link.getLink());
 
-            sendLink(user, linkBuilder.toString());
+            //sendLink(user, linkBuilder.toString());
 
             return linkBuilder.toString();
         } catch (Exception ex) {
