@@ -1,5 +1,5 @@
 package com.example.Diplomna.services;
-import com.example.Diplomna.auth.ActivationResponse;
+import com.example.Diplomna.auth.response.ActivationResponse;
 import com.example.Diplomna.model.ActivationLink;
 import com.example.Diplomna.model.User;
 import com.example.Diplomna.repo.ActivationLinkRepo;
@@ -50,5 +50,9 @@ public class ActivationLinkService {
         return ActivationResponse.builder()
                 .email(user.getEmail())
                 .build();
+    }
+
+    public void deleteLinkById(Long id) {
+        activationLinkRepo.deleteById(id);
     }
 }

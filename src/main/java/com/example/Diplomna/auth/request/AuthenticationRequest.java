@@ -1,4 +1,4 @@
-package com.example.Diplomna.auth;
+package com.example.Diplomna.auth.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

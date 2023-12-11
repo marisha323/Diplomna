@@ -1,6 +1,12 @@
-package com.example.Diplomna.auth;
+package com.example.Diplomna.auth.services;
 
+import com.example.Diplomna.auth.request.AuthenticationRequest;
+import com.example.Diplomna.auth.request.RegisterRequest;
+import com.example.Diplomna.auth.request.ReloginRequest;
+import com.example.Diplomna.auth.response.AuthenticationResponse;
+import com.example.Diplomna.auth.response.RegisterResponse;
 import com.example.Diplomna.config.JwtService;
+import com.example.Diplomna.dto.UserDto;
 import com.example.Diplomna.enums.Role;
 import com.example.Diplomna.model.User;
 import com.example.Diplomna.repo.UserRepo;
@@ -11,7 +17,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -65,13 +70,7 @@ public class AuthenticationService {
     }
 
     private AuthenticationResponse createAuthenticationResponse(UserDetails user) {
-        var accessToken = jwtService.generateAccessToken(user);
-        var refreshToken = jwtService.generateRefreshToken(user);
-
-        return AuthenticationResponse.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .build();
+        return AuthenticationResponse.create(user, userRepo);
     }
 
     private boolean isUserExistsByEmail(String email) {

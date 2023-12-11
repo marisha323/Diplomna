@@ -25,6 +25,8 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests()
                 .requestMatchers("/api/auth/**")
                 .permitAll()
+                .requestMatchers("/api/google/**")
+                .permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()

@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Data
 public class ActivationLink implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false,updatable = false)
     private Long id;
     private LocalDateTime expireDateTime;

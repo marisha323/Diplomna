@@ -24,20 +24,20 @@ public class User implements UserDetails {
     @Column(nullable = false,updatable = false)
     private Long id;
     private String userName;
+    @Column(unique = true)
     private String email;
     @Column(nullable = true)
     private String password;
-    @OneToOne
-    @JoinColumn(name = "userRoleId")
-    private UserRole userRole;
-    @OneToOne
-    @JoinColumn(name = "logoId")
-    private File file;
+    @Column(nullable = true)
+    private String externalId;
+    private String photoUrl;
     private boolean isActivated;
 
 
     @Enumerated (EnumType.STRING)
     private Role role;
+
+    public String getUserName() {return userName;}
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));

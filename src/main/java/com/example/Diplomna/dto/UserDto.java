@@ -1,4 +1,4 @@
-package com.example.Diplomna.auth;
+package com.example.Diplomna.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ActivationResponse {
+public class UserDto {
+    private Long id;
     private String email;
+    private String displayName;
+    private String photoUrl;
 }

@@ -1,5 +1,10 @@
-package com.example.Diplomna.auth;
+package com.example.Diplomna.auth.controllers;
 
+import com.example.Diplomna.auth.response.AuthenticationResponse;
+import com.example.Diplomna.auth.services.AuthenticationService;
+import com.example.Diplomna.auth.request.AuthenticationRequest;
+import com.example.Diplomna.auth.request.RegisterRequest;
+import com.example.Diplomna.auth.request.ReloginRequest;
 import com.example.Diplomna.services.ActivationLinkService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

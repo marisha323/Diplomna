@@ -1,4 +1,4 @@
-package com.example.Diplomna.auth;
+package com.example.Diplomna.auth.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticationResponse {
-
-    private String accessToken;
-    private String refreshToken;
+public class ActivationResponse {
+    private String email;
 }
