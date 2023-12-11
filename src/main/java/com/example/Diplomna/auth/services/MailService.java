@@ -36,7 +36,7 @@ public class MailService {
             linkBuilder.append("?user_id=").append(link.getUser().getId());
             linkBuilder.append("&code=").append(link.getLink());
 
-//            sendLink(user, linkBuilder.toString());
+            sendLink(user, linkBuilder.toString());
 
             return linkBuilder.toString();
         } catch (Exception ex) {
@@ -51,7 +51,7 @@ public class MailService {
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setTo(user.getEmail());
         simpleMailMessage.setSubject("Активація облікового запису на OwUa");
-        simpleMailMessage.setText(link);
+        simpleMailMessage.setText("Для завершення реєстрації перейдіть за посиланням: \n" + link);
 
         mailSender.send(simpleMailMessage);
 
