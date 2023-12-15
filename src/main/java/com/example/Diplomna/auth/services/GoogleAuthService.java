@@ -44,13 +44,17 @@ public class GoogleAuthService {
         return createAuthenticationResponse(user);
     }
 
-    private Object authenticate(GoogleAuthRequest request) throws Exception {
-        User user = userRepo.findByEmail(request.getEmail()).orElseThrow();
-        if (!user.getExternalId().equals(request.getUid())) {
-            throw new Exception("User already exists");
-        }
+    private Object authenticate(GoogleAuthRequest request) {
+        User user = userRepo.findByEmail(request.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
         return createAuthenticationResponse(user);
     }
+    // private Object authenticate(GoogleAuthRequest request) throws Exception {
+//     User user = userRepo.findByEmail(request.getEmail()).orElseThrow();
+//     if (!user.getExternalId().equals(request.getUid())) {
+//         throw new Exception("User already exists");
+//     }
+//     return createAuthenticationResponse(user);
+// }
 
     private AuthenticationResponse createAuthenticationResponse(UserDetails user) {
         return AuthenticationResponse.create(user, userRepo);
