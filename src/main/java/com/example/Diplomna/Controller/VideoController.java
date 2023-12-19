@@ -72,8 +72,6 @@ public class VideoController {
         return "rdfigjrdifjhidh";
     }
 
-}
-
     @PostMapping(path = "/uploadNew", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> uploadVideo(NewVideoRepr newVideoRepr) {
         logger.info("Title: " + newVideoRepr.getTitle());
