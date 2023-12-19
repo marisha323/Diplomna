@@ -80,7 +80,7 @@ public class UserController {
 
         logger.info("TOKEN: "+ token);
         Claims claims = Jwts.parser()
-                .setSigningKey("438cfffbf78a11313266c90207250b6a863db87595ecf9c6841562223cb3aa41")
+                .setSigningKey(SECRET_KEY)
                 .parseClaimsJws(token)
                 .getBody();
         logger.info("CLAIMS: "+ claims);
