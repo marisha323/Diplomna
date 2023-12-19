@@ -43,4 +43,7 @@ public class AccessStatus implements Serializable {
         this.id = id;
         this.status = status;
     }
+
+    public static class NotFoundException extends RuntimeException{
+    }
 }
