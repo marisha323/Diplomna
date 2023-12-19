@@ -49,6 +49,9 @@ public class VideoService {
     }
 
 
+
+
+
     private static VideoMetadataRepr convert(Video video) {
         VideoMetadataRepr repr = new VideoMetadataRepr();
 
@@ -117,16 +120,11 @@ public class VideoService {
                 .collect(Collectors.toList());
     }
 
-//    public Optional<VideoMetadataRepr>findById(long id)
-//    {
-//        return videoRepo.findById(id)
-//                .map(VideoService::convert);
-//    }
-
     public Optional<VideoMetadataRepr> findById(Long id) {
         return videoRepo.findById(id)
                 .map(VideoService::convert);
     }
+
 
     @Transactional
     public void saveNewVideo(NewVideoRepr newVideoRepr)

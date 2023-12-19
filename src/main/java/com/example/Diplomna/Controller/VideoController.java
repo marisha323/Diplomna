@@ -1,6 +1,7 @@
 package com.example.Diplomna.Controller;
 
 import com.example.Diplomna.model.Video;
+import com.example.Diplomna.model.VideoMetadataRepr;
 import com.example.Diplomna.repo.VideoRepo;
 import com.example.Diplomna.services.VideoService;
 import org.slf4j.Logger;
@@ -51,9 +52,8 @@ public class VideoController {
     }
 
     @GetMapping("/{id}")
-    public Video findById(@PathVariable("id") long id)
-    {
-        return null;
+    public VideoMetadataRepr findVideoMetadataById(@PathVariable("id") Long id) {
+        return videoService.findById(id).orElseThrow(NotFoundException::new);
     }
 
 
