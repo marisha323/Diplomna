@@ -11,4 +11,13 @@ public class VideoCategory implements Serializable {
     @Column(nullable = false,updatable = false)
     private Long id;
     private String title;
+
+    public void setId(Long videoCategoryId) {
+        this.id=videoCategoryId;
+    }
+
+    public Long getId() {
+
+        return this.id;
+    }
 }
