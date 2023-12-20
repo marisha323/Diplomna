@@ -1,4 +1,4 @@
-package com.example.Diplomna.Controller;
+package com.example.Diplomna.classValid;
 
 import org.springframework.web.multipart.MultipartFile;
 

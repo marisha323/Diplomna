@@ -1,6 +1,6 @@
 package com.example.Diplomna.services;
 
-import com.example.Diplomna.Controller.NewVideoRepr;
+import com.example.Diplomna.classValid.NewVideoRepr;
 import com.example.Diplomna.Utils;
 import com.example.Diplomna.model.Video;
 import com.example.Diplomna.model.VideoMetadataRepr;
@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
