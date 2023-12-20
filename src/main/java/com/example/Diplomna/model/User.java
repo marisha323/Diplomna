@@ -1,5 +1,6 @@
 package com.example.Diplomna.model;
 
+import com.example.Diplomna.classValid.AddImgUser;
 import com.example.Diplomna.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
