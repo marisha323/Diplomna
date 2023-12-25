@@ -5,6 +5,9 @@ import com.example.Diplomna.model.Video;
 import com.example.Diplomna.repo.UserRepo;
 import com.example.Diplomna.repo.VideoRepo;
 import com.example.Diplomna.services.VideoService;
+import net.bramp.ffmpeg.FFprobe;
+import net.bramp.ffmpeg.probe.FFmpegFormat;
+import org.bytedeco.javacv.FFmpegFrameGrabber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,6 +98,7 @@ public class VideoController {
 
         MultipartFile file = newVideoRepr.getFile();
         if (file != null) {
+
             logger.info("File Name: " + file.getOriginalFilename());
             logger.info("Content Type: " + file.getContentType());
 
@@ -113,8 +117,17 @@ public class VideoController {
             video.setViews(0L); // Initial views count
             video.setVideoCategory(1L); // Assuming you have a method to get the video category
             video.setUploadDate(LocalDateTime.now());
-            video.setTime(Time.valueOf("11:22:00")); // Assuming you have a method to get the time
+            //video.setTime(Time.valueOf("11:22:55")); // Assuming you have a method to get the time
 
+            // Get video duration
+
+            long duration = getVideoDuration(Path);
+
+            if (duration != -1) {
+                logger.info("Тривалість відео: " + duration + " мілісекунд");
+            } else {
+                logger.info("Не вдалося отримати тривалість відео");
+            }
             // Save the Video object to the database
             videoRepo.save(video);
 
@@ -130,6 +143,24 @@ public class VideoController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
         return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    public static long getVideoDuration(String path) {
+        try {
+            FFmpegFrameGrabber grabber = new FFmpegFrameGrabber(path);
+            grabber.start();
+
+            // Отримати тривалість в мілісекундах
+            long duration = grabber.getLengthInTime() / 1000;
+
+            grabber.stop();
+            grabber.release();
+
+            return duration;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
     }
 
 

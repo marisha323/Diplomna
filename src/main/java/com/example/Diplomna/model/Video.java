@@ -22,9 +22,6 @@ public class Video implements Serializable {
     @JoinColumn(name = "accessStatusId")
     private AccessStatus accessStatus;
 
-
-
-
 //?????????
     //    @ManyToOne
 //    @JoinColumn(name = "previewId")
