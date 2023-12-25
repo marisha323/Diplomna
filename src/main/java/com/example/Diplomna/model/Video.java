@@ -17,7 +17,7 @@ public class Video implements Serializable {
     private String path;
     @ManyToOne
     @JoinColumn(name = "ownerId")
-    private User user;
+    private User ownerId;
     @ManyToOne
     @JoinColumn(name = "accessStatusId")
     private AccessStatus accessStatus;
@@ -68,22 +68,32 @@ public class Video implements Serializable {
         this.path = path;
     }
 
-    public User getUser() {
-        return user;
+    public Long getUser() {
+        return ownerId != null ? ownerId.getId() : null;
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
+    public void setUser(Long userId) {
+        if (userId != null) {
+            User user = new User();
+            user.setId(userId);
+            this.ownerId = user;
+        } else {
+            this.ownerId = null;
+        }
 
-    public AccessStatus getAccessStatus() {
-        return accessStatus;
-    }
+        public Long getAccessStatus() {
+            return accessStatus != null ? accessStatus.getId() : null;
+        }
 
-    public void setAccessStatus(AccessStatus accessStatus) {
-        this.accessStatus = accessStatus;
-    }
-
+        public void setAccessStatus(Long accessStatusId) {
+            if (accessStatusId != null) {
+                AccessStatus status = new AccessStatus();
+                status.setId(accessStatusId);
+                this.accessStatus = status;
+            } else {
+                this.accessStatus = null;
+            }
+        }
     public Long getViews() {
         return views;
     }
@@ -92,14 +102,19 @@ public class Video implements Serializable {
         this.views = views;
     }
 
-    public VideoCategory getVideoCategory() {
-        return videoCategory;
+    public Long getVideoCategory() {
+        return videoCategory != null ? videoCategory.getId() : null;
     }
 
-    public void setVideoCategory(VideoCategory videoCategory) {
-        this.videoCategory = videoCategory;
+    public void setVideoCategory(Long videoCategoryId) {
+        if (videoCategoryId != null) {
+            VideoCategory category = new VideoCategory();
+            category.setId(videoCategoryId);
+            this.videoCategory = category;
+        } else {
+            this.videoCategory = null;
+        }
     }
-
     public LocalDateTime getUploadDate() {
         return uploadDate;
     }
@@ -125,7 +140,7 @@ public class Video implements Serializable {
         this.title = title;
         this.description = description;
         this.path = path;
-        this.user = user;
+        this.ownerId = user;
         this.accessStatus = accessStatus;
         this.views = views;
         this.videoCategory = videoCategory;
