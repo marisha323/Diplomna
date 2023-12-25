@@ -1,4 +1,4 @@
-package com.example.Diplomna.services;
+package com.example.Diplomna.GrabePicture;
 
 import org.bytedeco.javacv.Java2DFrameConverter;
 import org.springframework.stereotype.Service;
@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import org.bytedeco.javacv.FFmpegFrameGrabber;
 
-import static com.example.Diplomna.Utils.removeFileExt;
+import static com.example.Diplomna.GrabePicture.Utils.removeFileExt;
 
 
 //сервіс бере файли з відео і за допомогою бібліотеки проходиться по першим 50 фреймам і зберігає картинку для відео

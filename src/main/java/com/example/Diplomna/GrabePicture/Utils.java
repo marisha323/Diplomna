@@ -1,4 +1,4 @@
-package com.example.Diplomna;
+package com.example.Diplomna.GrabePicture;
 
 //клас бере назву відео і додає розширення крапку
 public final class Utils {

@@ -1,7 +1,8 @@
-package com.example.Diplomna.Controller;
+package com.example.Diplomna.GrabePicture;
 
 import org.springframework.web.multipart.MultipartFile;
 
+//считати дані із форми
 public class NewVideoRepr {
 
     private String description;

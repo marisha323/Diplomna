@@ -1,9 +1,10 @@
 package com.example.Diplomna.services;
 
-import com.example.Diplomna.Controller.NewVideoRepr;
-import com.example.Diplomna.Utils;
+import com.example.Diplomna.GrabePicture.FrameGrabberService;
+import com.example.Diplomna.GrabePicture.NewVideoRepr;
+import com.example.Diplomna.GrabePicture.Utils;
 import com.example.Diplomna.model.Video;
-import com.example.Diplomna.model.VideoMetadataRepr;
+import com.example.Diplomna.GrabePicture.VideoMetadataRepr;
 import com.example.Diplomna.repo.VideoRepo;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
@@ -13,7 +14,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -44,8 +44,10 @@ public class VideoService {
     private FrameGrabberService frameGrabberService;
 
 @Autowired
-    public VideoService(VideoRepo videoRepo) {
-        this.videoRepo = videoRepo;
+    public VideoService(VideoRepo videoRepo, FrameGrabberService frameGrabberService) {
+
+    this.videoRepo = videoRepo;
+    this.frameGrabberService = frameGrabberService;
     }
 
 
@@ -56,14 +58,27 @@ public class VideoService {
         VideoMetadataRepr repr = new VideoMetadataRepr();
 
         repr.setId(video.getId());
-        repr.setPreviewUrl("/video/preview/" + video.getId());
-        repr.setStreamUrl("/video/stream/" + video.getId());
+        repr.setPreviewUrl("/video/preview/" + video.getId());// відобразити картинку
+        repr.setStreamUrl("/video/stream/" + video.getId());// показати відео
         repr.setDescription(video.getDescription());
         repr.setContentType(video.getVideoCategory().toString());
         return repr;
 
 
     }
+
+    public List<VideoMetadataRepr> findAllVideoMetadata() {
+        return videoRepo.findAll().stream()
+                .map(VideoService::convert)
+                .collect(Collectors.toList());
+    }
+
+    public Optional<VideoMetadataRepr> findById(Long id) {
+        return videoRepo.findById(id)
+                .map(VideoService::convert);
+    }
+
+
 
     public ResponseEntity<String> uploadVideo(MultipartFile file)
     {
@@ -114,16 +129,9 @@ public class VideoService {
                 });
     }
 
-    public List<VideoMetadataRepr> findAllVideoMetadata() {
-        return videoRepo.findAll().stream()
-                .map(VideoService::convert)
-                .collect(Collectors.toList());
-    }
 
-    public Optional<VideoMetadataRepr> findById(Long id) {
-        return videoRepo.findById(id)
-                .map(VideoService::convert);
-    }
+
+
 
 
     @Transactional

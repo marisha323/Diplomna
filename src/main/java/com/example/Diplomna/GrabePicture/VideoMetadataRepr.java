@@ -1,7 +1,7 @@
-package com.example.Diplomna.model;
+package com.example.Diplomna.GrabePicture;
 
 
-//клас викорю для передачі інфи на фронт
+//клас викор. для передачі інфи на фронт
 public class VideoMetadataRepr {
     private Long id;
 

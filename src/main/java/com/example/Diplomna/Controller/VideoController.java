@@ -1,8 +1,8 @@
 package com.example.Diplomna.Controller;
 
+import com.example.Diplomna.GrabePicture.NewVideoRepr;
 import com.example.Diplomna.model.Video;
-import com.example.Diplomna.model.VideoMetadataRepr;
-import com.example.Diplomna.repo.VideoRepo;
+import com.example.Diplomna.GrabePicture.VideoMetadataRepr;
 import com.example.Diplomna.services.VideoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,16 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.util.List;
 
 @RestController
