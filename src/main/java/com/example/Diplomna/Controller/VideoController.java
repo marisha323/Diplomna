@@ -25,17 +25,17 @@ public class VideoController {
 
     private VideoRepo videoRepo;
 
-    private FrameGrabberService frameGrabberService;
+
     private static final Logger logger = LoggerFactory.getLogger(VideoController.class);
 
     @Value("${data.folder")
     private String dataFolder;
 
 
-    public VideoController(VideoRepo videoRepo, FrameGrabberService frameGrabberService)
+    public VideoController(VideoRepo videoRepo)
     {
         this.videoRepo=videoRepo;
-        this.frameGrabberService = frameGrabberService;
+
     }
 
     @GetMapping("/add")
