@@ -1,9 +1,6 @@
 package com.example.Diplomna.Controller;
 
-import com.example.Diplomna.GrabePicture.FrameGrabberService;
 import com.example.Diplomna.GrabePicture.NewVideoRepr;
-import com.example.Diplomna.model.Video;
-import com.example.Diplomna.model.User;
 import com.example.Diplomna.GrabePicture.VideoMetadataRepr;
 import com.example.Diplomna.repo.VideoRepo;
 import com.example.Diplomna.services.VideoService;
@@ -16,19 +13,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.sql.Time;
-import java.time.LocalDateTime;
 import java.util.List;
-
-import static java.nio.file.StandardOpenOption.CREATE;
-import static java.nio.file.StandardOpenOption.WRITE;
 
 @RestController
 @RequestMapping("/video")
@@ -80,15 +66,15 @@ public class VideoController {
     }
 
 
-    @GetMapping(value = "/preview/{id}", produces = MediaType.IMAGE_JPEG_VALUE)
-    public ResponseEntity<byte[]> getPreviewPicture(@PathVariable("id") Long id) {
-        byte[] previewBytes = videoService.getPreviewBytes(id)
-                .orElseThrow(NotFoundException::new);
-
-        return ResponseEntity.ok()
-                .contentType(MediaType.IMAGE_JPEG)
-                .body(previewBytes);
-    }
+//    @GetMapping(value = "/preview/{id}", produces = MediaType.IMAGE_JPEG_VALUE)
+//    public ResponseEntity<byte[]> getPreviewPicture(@PathVariable("id") Long id) {
+//        byte[] previewBytes = videoService.getPreviewBytes(id)
+//                .orElseThrow(NotFoundException::new);
+//
+//        return ResponseEntity.ok()
+//                .contentType(MediaType.IMAGE_JPEG)
+//                .body(previewBytes);
+//    }
 
 
     @PostMapping(path = "/uploadNew", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

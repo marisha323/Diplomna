@@ -5,13 +5,11 @@ package com.example.Diplomna.GrabePicture;
 public class VideoMetadataRepr {
     private Long id;
 
+    private String title;
     private String description;
 
     private String contentType;
-
-    private String previewUrl;
-
-    private String streamUrl;
+    private String path;
 
     public VideoMetadataRepr() {
     }
@@ -24,20 +22,20 @@ public class VideoMetadataRepr {
         this.id = id;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getPreviewUrl() {
-        return previewUrl;
-    }
-
-    public void setPreviewUrl(String previewUrl) {
-        this.previewUrl = previewUrl;
     }
 
     public String getContentType() {
@@ -48,11 +46,11 @@ public class VideoMetadataRepr {
         this.contentType = contentType;
     }
 
-    public String getStreamUrl() {
-        return streamUrl;
+    public String getPath() {
+        return path;
     }
 
-    public void setStreamUrl(String streamUrl) {
-        this.streamUrl = streamUrl;
+    public void setPath(String path) {
+        this.path = path;
     }
 }
