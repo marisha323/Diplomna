@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Entity
 public class Video implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false,updatable = false)
     private Long id;
     private String title;
@@ -21,7 +21,8 @@ public class Video implements Serializable {
     @ManyToOne
     @JoinColumn(name = "accessStatusId")
     private AccessStatus accessStatus;
-//?????????
+
+    //?????????
     //    @ManyToOne
 //    @JoinColumn(name = "previewId")
 //    private User user;
@@ -80,20 +81,30 @@ public class Video implements Serializable {
         } else {
             this.ownerId = null;
         }
+    }
 
-        public Long getAccessStatus() {
-            return accessStatus != null ? accessStatus.getId() : null;
-        }
 
-        public void setAccessStatus(Long accessStatusId) {
-            if (accessStatusId != null) {
-                AccessStatus status = new AccessStatus();
-                status.setId(accessStatusId);
-                this.accessStatus = status;
-            } else {
-                this.accessStatus = null;
-            }
+//    public User getUser() {
+//        return ownerId;
+//    }
+//
+//    public void setUser(User user) {
+//        this.ownerId = user;
+//    }
+
+    public Long getAccessStatus() {
+        return accessStatus != null ? accessStatus.getId() : null;
+    }
+
+    public void setAccessStatus(Long accessStatusId) {
+        if (accessStatusId != null) {
+            AccessStatus status = new AccessStatus();
+            status.setId(accessStatusId);
+            this.accessStatus = status;
+        } else {
+            this.accessStatus = null;
         }
+    }
     public Long getViews() {
         return views;
     }
@@ -115,6 +126,7 @@ public class Video implements Serializable {
             this.videoCategory = null;
         }
     }
+
     public LocalDateTime getUploadDate() {
         return uploadDate;
     }
