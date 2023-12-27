@@ -1,14 +1,19 @@
 package com.example.Diplomna.Controller;
 
-import com.example.Diplomna.classValid.NewVideoRepr;
+
 import com.example.Diplomna.model.Video;
+import com.example.Diplomna.GrabePicture.NewVideoRepr;
+import com.example.Diplomna.GrabePicture.VideoMetadataRepr;
+import com.example.Diplomna.repo.VideoRepo;
 import com.example.Diplomna.services.VideoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,7 +28,22 @@ public class VideoController {
 
     @Autowired
     private VideoService videoService;
+
+    private VideoRepo videoRepo;
+
+
     private static final Logger logger = LoggerFactory.getLogger(VideoController.class);
+
+    @Value("${data.folder")
+    private String dataFolder;
+
+
+    public VideoController(VideoRepo videoRepo)
+    {
+        this.videoRepo=videoRepo;
+
+    }
+
     @GetMapping("/add")
     public String addCategory(Model model) {
         return "rdfigjrdifjhidh";
@@ -41,45 +61,33 @@ public class VideoController {
     }
 
     @GetMapping("/all")
-    public List<Video> findAll()
+    public List<VideoMetadataRepr> findAll()
     {
-        return null;
+        return videoService.findAll();
     }
 
     @GetMapping("/{id}")
-    public Video findById(@PathVariable("id") long id)
-    {
-        return null;
+    public VideoMetadataRepr findVideoMetadataById(@PathVariable("id") Long id) {
+        return videoService.findById(id).orElseThrow(NotFoundException::new);
     }
 
 
-    @GetMapping(value = "/preview/{id}", produces = MediaType.IMAGE_JPEG_VALUE)
-    public ResponseEntity<StreamingResponseBody> getPreviewPicture(@PathVariable("id") Long id) {
-        InputStream inputStream = videoService.getPreviewInputStream(id)
-                .orElseThrow(NotFoundException::new);
-        return ResponseEntity.ok(inputStream::transferTo);
-    }
+//    @GetMapping(value = "/preview/{id}", produces = MediaType.IMAGE_JPEG_VALUE)
+//    public ResponseEntity<byte[]> getPreviewPicture(@PathVariable("id") Long id) {
+//        byte[] previewBytes = videoService.getPreviewBytes(id)
+//                .orElseThrow(NotFoundException::new);
+//
+//        return ResponseEntity.ok()
+//                .contentType(MediaType.IMAGE_JPEG)
+//                .body(previewBytes);
+//    }
 
-    @GetMapping("/info")
-    public String videoData() //інжектимо поточного користувача через принципал
-    {
-        return "rdfigjrdifjhidh";
-    }
 
     @PostMapping(path = "/uploadNew", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Void> uploadVideo(NewVideoRepr newVideoRepr) {
-        logger.info("Title: " + newVideoRepr.getTitle());
-        logger.info("Description: " + newVideoRepr.getDescription());
-
-        MultipartFile file = newVideoRepr.getFile();
-        if (file != null) {
-            logger.info("File Name: " + file.getOriginalFilename());
-            logger.info("Content Type: " + file.getContentType());
-            // You might want to log more details depending on your requirements
-        }
+    public ResponseEntity<Void> uploadVideo(@RequestHeader("Authorization") String authorizationHeader,NewVideoRepr newVideoRepr) {
         try {
+            videoService.uploadVideo(authorizationHeader,newVideoRepr);
             logger.info("Video saved successfully");
-            videoService.uploadVideo(file);
         } catch (Exception ex) {
             logger.error("Error saving video", ex);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -88,6 +96,10 @@ public class VideoController {
     }
 
 
+    @ExceptionHandler
+    public ResponseEntity<Void> notFoundExceptionHandler(NotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
 
 }
 

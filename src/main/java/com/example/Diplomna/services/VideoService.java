@@ -1,9 +1,13 @@
 package com.example.Diplomna.services;
 
-import com.example.Diplomna.classValid.NewVideoRepr;
-import com.example.Diplomna.Utils;
+
+import com.example.Diplomna.GrabePicture.NewVideoRepr;
+import com.example.Diplomna.classValid.CrmHelper;
+import com.example.Diplomna.model.User;
 import com.example.Diplomna.model.Video;
-import com.example.Diplomna.model.VideoMetadataRepr;
+import com.example.Diplomna.GrabePicture.VideoMetadataRepr;
+import com.example.Diplomna.model.VideoCategory;
+import com.example.Diplomna.repo.UserRepo;
 import com.example.Diplomna.repo.VideoRepo;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
@@ -13,6 +17,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -22,13 +28,14 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Time;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 //import static java.nio.file.AccessMode.WRITE;
-import static java.nio.file.StandardOpenOption.CREATE;
+
 
 @Service
 public class VideoService {
@@ -39,11 +46,11 @@ public class VideoService {
     @Value("${data.folder}")
     private String dataFolder;
 
+    private UserRepo userRepo;
 
-    private FrameGrabberService frameGrabberService;
-
-@Autowired
-    public VideoService(VideoRepo videoRepo) {
+    @Autowired
+    public VideoService(VideoRepo videoRepo, UserRepo userRepo) {
+        this.userRepo = userRepo;
         this.videoRepo = videoRepo;
     }
 
@@ -52,8 +59,8 @@ public class VideoService {
         VideoMetadataRepr repr = new VideoMetadataRepr();
 
         repr.setId(video.getId());
-        repr.setPreviewUrl("/video/preview/" + video.getId());
-        repr.setStreamUrl("/video/stream/" + video.getId());
+        repr.setTitle(video.getTitle());
+        repr.setPath(video.getPath());//
         repr.setDescription(video.getDescription());
         repr.setContentType(video.getVideoCategory().toString());
         return repr;
@@ -61,115 +68,77 @@ public class VideoService {
 
     }
 
-    public ResponseEntity<String> uploadVideo(MultipartFile file)
-    {
-            logger.info("Service File Name: " + file.getOriginalFilename());
-        try {
-            // Specify the path to the folder for storing files
-            String folderPath = "src/main/resources/videos/";
-            //MultipartFile file = newVideoRepr.getFile();
-            // Ensure that the folder exists; if not, create it
-            File folder = new File(folderPath);
-            if (!folder.exists()) {
-                folder.mkdirs();
-            }
-
-            // Generate a unique file name
-            String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-
-            // Create a file path for storage
-            Path filePath = Paths.get(folderPath, fileName);
-
-            // Save the file to the specified path
-            file.transferTo(filePath);
-
-            // Return the file path as a string
-            return new ResponseEntity<>(filePath.toString(), HttpStatus.OK);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            return new ResponseEntity<>("Failed to upload the file.", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    public Optional<InputStream> getPreviewInputStream(Long id) {
-        return videoRepo.findById(id)
-                .flatMap(vmd -> {
-                    Path previewPicturePath = Path.of(dataFolder,
-                            vmd.getId().toString(),
-                            Utils.removeFileExt(vmd.getPath()) + ".jpeg");
-                    if (!Files.exists(previewPicturePath)) {
-                        return Optional.empty();
-                    }
-                    try {
-                        return Optional.of(Files.newInputStream(previewPicturePath));
-                    } catch (IOException ex) {
-                        logger.error("", ex);
-                        return Optional.empty();
-                    }
-                });
-    }
-
-    public List<VideoMetadataRepr> findAllVideoMetadata() {
+    public List<VideoMetadataRepr> findAll() {
         return videoRepo.findAll().stream()
                 .map(VideoService::convert)
                 .collect(Collectors.toList());
     }
-
-//    public Optional<VideoMetadataRepr>findById(long id)
-//    {
-//        return videoRepo.findById(id)
-//                .map(VideoService::convert);
-//    }
 
     public Optional<VideoMetadataRepr> findById(Long id) {
         return videoRepo.findById(id)
                 .map(VideoService::convert);
     }
 
+
     @Transactional
-    public void saveNewVideo(NewVideoRepr newVideoRepr)
-    {
-        Video video = new Video();
-        Path directory = Path.of(dataFolder,video.getId().toString());
-logger.info(newVideoRepr.getTitle());
+    public void uploadVideo(String authorizationHeader, NewVideoRepr newVideoRepr) {
 
-        video.setTitle(newVideoRepr.getFile().getOriginalFilename());
-        video.setDescription(newVideoRepr.getDescription());
-        video.setPath(directory.toString());
-        video.setUser(null);
-        video.setAccessStatus(null);
-        video.setUploadDate(LocalDateTime.now());
-        video.setVideoCategory(null);
-
-//        metadata.setFileName(newVideoRepr.getFile().getOriginalFilename());
-//        metadata.setContentType(newVideoRepr.getFile().getContentType());
-//        metadata.setFileSize(newVideoRepr.getFile().getSize());
-//        metadata.setDescription(newVideoRepr.getDescription());
-
-        videoRepo.save(video);
+        CrmHelper crmHelper = new CrmHelper(userRepo);
+        Long userId = crmHelper.userId(authorizationHeader);
+        MultipartFile file = newVideoRepr.getFile();
+        String path = dataFolder;
+        logger.info("PATH:  .... " + path);
+        if (userId != null&&file != null) {
 
 
-        try{
-            Files.createDirectory(directory);
-            Path file = Path.of(directory.toString(),newVideoRepr.getFile().getOriginalFilename());
-            try(OutputStream out = Files.newOutputStream(file, CREATE)){
-                newVideoRepr.getFile().getInputStream().transferTo(out);
-            }
-            frameGrabberService.generatePreviewPictures(file);
-          //  long videoLength = frameGrabberService.generatePreviewPictures(file);
+                // SAVE TO DB
+                Video video = new Video();
+                video.setTitle(newVideoRepr.getTitle());
+                video.setDescription(newVideoRepr.getDescription());
+                video.setUser(userId);
 
-        }catch (IOException ex)
-        {
-            logger.error("", ex);
-            throw new IllegalStateException();
+                video.setAccessStatus(newVideoRepr.getAccessStatusId());
+                video.setViews(0L);
+                video.setVideoCategory(newVideoRepr.getCategoryId());
+                video.setUploadDate(LocalDateTime.now());
+                video.setTime(Time.valueOf("08:33:55"));
+                videoRepo.save(video);
+                // Save the Video object to the database
+                String relativePath = "/" + video.getId().toString();
+
+
+                Path directory = Paths.get(dataFolder, relativePath);
+
+                logger.info("directory: " + directory);
+                if (!Files.exists(directory)) {
+                    try {
+                        Files.createDirectories(directory);
+
+
+                        // Generate a unique filename using the current timestamp
+                        String fileName = file.getOriginalFilename();
+
+                        // Create a file path for storage
+                        Path file2 = directory.resolve(fileName);
+                        logger.info("file2: " + file2);
+
+                        // Save the file to the specified path
+                        file.transferTo(file2); // toFile() важливо додати тут
+
+
+                        video.setPath(file2.toString());
+                        videoRepo.save(video);
+
+                        // long videoLength = frameGrabberService.generatePreviewPictures(file2);
+                        //logger.info(String.valueOf(videoLength));
+                    } catch (IOException ex) {
+                        logger.error("Error:", ex);
+                    }
+                }
+
+
         }
-
     }
-
-
-
-
 
 
 }
