@@ -16,7 +16,6 @@ public interface VideoRepo extends JpaRepository<Video,Long> {
 //
 //    public void saveNewVideo(NewVideoRepr newVideoRepr);
 
-
     List<Video> findByVideoCategory_Id(Long videoCategoryId);
 
 

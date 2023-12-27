@@ -28,27 +28,19 @@ public class VideoController {
 
     @Autowired
     private VideoService videoService;
-
     private VideoRepo videoRepo;
-
-
     private static final Logger logger = LoggerFactory.getLogger(VideoController.class);
-
     @Value("${data.folder")
     private String dataFolder;
-
-
     public VideoController(VideoRepo videoRepo)
     {
         this.videoRepo=videoRepo;
 
     }
-
     @GetMapping("/add")
     public String addCategory(Model model) {
         return "rdfigjrdifjhidh";
     }
-
     //    @PostMapping
 //    @ResponseStatus(HttpStatus.CREATED)
 //    public void uploadVideo(@RequestParam("file")MultipartFile file)
@@ -59,19 +51,15 @@ public class VideoController {
     public ResponseEntity<String> handleVideoUpload() {
         return null;
     }
-
     @GetMapping("/all")
     public List<VideoMetadataRepr> findAll()
     {
         return videoService.findAll();
     }
-
     @GetMapping("/{id}")
     public VideoMetadataRepr findVideoMetadataById(@PathVariable("id") Long id) {
         return videoService.findById(id).orElseThrow(NotFoundException::new);
     }
-
-
 //    @GetMapping(value = "/preview/{id}", produces = MediaType.IMAGE_JPEG_VALUE)
 //    public ResponseEntity<byte[]> getPreviewPicture(@PathVariable("id") Long id) {
 //        byte[] previewBytes = videoService.getPreviewBytes(id)
@@ -81,8 +69,6 @@ public class VideoController {
 //                .contentType(MediaType.IMAGE_JPEG)
 //                .body(previewBytes);
 //    }
-
-
     @PostMapping(path = "/uploadNew", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> uploadVideo(@RequestHeader("Authorization") String authorizationHeader,NewVideoRepr newVideoRepr) {
         try {
@@ -94,13 +80,10 @@ public class VideoController {
         }
         return ResponseEntity.status(HttpStatus.OK).build();
     }
-
-
     @ExceptionHandler
     public ResponseEntity<Void> notFoundExceptionHandler(NotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-
 }
 
 

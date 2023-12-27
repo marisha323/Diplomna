@@ -27,13 +27,11 @@ public class HomeController {
 
     @GetMapping("/sort")
     public ResponseEntity<List<Video>> sortCategory(@RequestParam Long videoCategoryId) {
-        // Перевірка наявності категорії
         if (videoCategoryService.existsById(videoCategoryId)) {
-            // Отримання всіх відео з даною категорією
             List<Video> videosInCategory = videoService.getVideosByCategoryId(videoCategoryId);
             return new ResponseEntity<>(videosInCategory, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);  // Категорія не знайдена
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 }

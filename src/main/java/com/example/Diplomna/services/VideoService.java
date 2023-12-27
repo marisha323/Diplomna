@@ -40,12 +40,9 @@ import java.util.stream.Collectors;
 @Service
 public class VideoService {
     private final VideoRepo videoRepo;
-
     private final Logger logger = LoggerFactory.getLogger(VideoService.class);
-
     @Value("${data.folder}")
     private String dataFolder;
-
     private UserRepo userRepo;
 
     @Autowired
@@ -53,8 +50,6 @@ public class VideoService {
         this.userRepo = userRepo;
         this.videoRepo = videoRepo;
     }
-
-
     private static VideoMetadataRepr convert(Video video) {
         VideoMetadataRepr repr = new VideoMetadataRepr();
 
@@ -67,19 +62,15 @@ public class VideoService {
 
 
     }
-
     public List<VideoMetadataRepr> findAll() {
         return videoRepo.findAll().stream()
                 .map(VideoService::convert)
                 .collect(Collectors.toList());
     }
-
     public Optional<VideoMetadataRepr> findById(Long id) {
         return videoRepo.findById(id)
                 .map(VideoService::convert);
     }
-
-
     @Transactional
     public void uploadVideo(String authorizationHeader, NewVideoRepr newVideoRepr) {
 
@@ -89,54 +80,34 @@ public class VideoService {
         String path = dataFolder;
         logger.info("PATH:  .... " + path);
         if (userId != null&&file != null) {
-
-
                 // SAVE TO DB
                 Video video = new Video();
                 video.setTitle(newVideoRepr.getTitle());
                 video.setDescription(newVideoRepr.getDescription());
                 video.setUser(userId);
-
                 video.setAccessStatus(newVideoRepr.getAccessStatusId());
                 video.setViews(0L);
                 video.setVideoCategory(newVideoRepr.getCategoryId());
                 video.setUploadDate(LocalDateTime.now());
                 video.setTime(Time.valueOf("08:33:55"));
                 videoRepo.save(video);
-                // Save the Video object to the database
                 String relativePath = "/" + video.getId().toString();
 
-
                 Path directory = Paths.get(dataFolder, relativePath);
-
                 logger.info("directory: " + directory);
                 if (!Files.exists(directory)) {
                     try {
                         Files.createDirectories(directory);
-
-
-                        // Generate a unique filename using the current timestamp
                         String fileName = file.getOriginalFilename();
-
-                        // Create a file path for storage
                         Path file2 = directory.resolve(fileName);
                         logger.info("file2: " + file2);
-
-                        // Save the file to the specified path
-                        file.transferTo(file2); // toFile() важливо додати тут
-
-
+                        file.transferTo(file2);
                         video.setPath(file2.toString());
                         videoRepo.save(video);
-
-                        // long videoLength = frameGrabberService.generatePreviewPictures(file2);
-                        //logger.info(String.valueOf(videoLength));
                     } catch (IOException ex) {
                         logger.error("Error:", ex);
                     }
                 }
-
-
         }
     }
     public List<Video> getVideosByCategoryId(Long videoCategoryId) {
