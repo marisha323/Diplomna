@@ -139,6 +139,8 @@ public class VideoService {
 
         }
     }
-
+    public List<Video> getVideosByCategoryId(Long videoCategoryId) {
+        return videoRepo.findByVideoCategory_Id(videoCategoryId);
+    }
 
 }

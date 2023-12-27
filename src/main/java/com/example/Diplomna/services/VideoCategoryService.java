@@ -41,5 +41,8 @@ public class VideoCategoryService {
         return videoCategoryRepo.findById(id)
                 .map(VideoCategoryService::convert);
     }
+    public boolean existsById(Long id) {
+        return videoCategoryRepo.existsById(id);
+    }
 
 }

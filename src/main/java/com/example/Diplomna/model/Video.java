@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import java.sql.Time;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 public class Video implements Serializable {
@@ -39,6 +40,9 @@ public class Video implements Serializable {
 
     public Long getId() {
         return id;
+    }
+    static List<Video> findByCategory_Id(Long videoCategoryId) {
+        return null;
     }
 
     public void setId(Long id) {
