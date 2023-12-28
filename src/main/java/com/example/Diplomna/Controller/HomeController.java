@@ -34,4 +34,8 @@ public class HomeController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+    @GetMapping("/search")
+    public List<Video> searchTitle(@RequestParam String title) {
+        return videoService.searchByTitle(title);
+    }
 }

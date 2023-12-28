@@ -43,20 +43,32 @@ public class Comment implements Serializable {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public Long getUser() {
+        return user != null ? user.getId() : null;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(Long userId) {
+        if (userId != null) {
+            User user = new User();
+            user.setId(userId);
+            this.user = user;
+        } else {
+            this.user = null;
+        }
     }
 
-    public Video getVideo() {
-        return video;
+    public Long getVideo() {
+        return video != null ? video.getId() : null;
     }
 
-    public void setVideo(Video video) {
-        this.video = video;
+    public void setVideo(Long videoId) {
+        if (videoId != null) {
+            Video video = new Video();
+            video.setId(videoId);
+            this.video = video;
+        } else {
+            this.video = null;
+        }
     }
 
     public String getText() {

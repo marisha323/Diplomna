@@ -73,7 +73,6 @@ public class VideoService {
     }
     @Transactional
     public void uploadVideo(String authorizationHeader, NewVideoRepr newVideoRepr) {
-
         CrmHelper crmHelper = new CrmHelper(userRepo);
         Long userId = crmHelper.userId(authorizationHeader);
         MultipartFile file = newVideoRepr.getFile();
@@ -113,5 +112,10 @@ public class VideoService {
     public List<Video> getVideosByCategoryId(Long videoCategoryId) {
         return videoRepo.findByVideoCategory_Id(videoCategoryId);
     }
-
+    public List<Video> searchByTitle(String title) {
+        return videoRepo.findByTitleContaining(title);
+    }
+    public boolean existsById(Long id) {
+        return videoRepo.existsById(id);
+    }
 }

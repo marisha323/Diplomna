@@ -44,7 +44,7 @@ public class Video implements Serializable {
     static List<Video> findByCategory_Id(Long videoCategoryId) {
         return null;
     }
-
+static List<Video> findByTitleContaining(String title){return null;}
     public void setId(Long id) {
         this.id = id;
     }
