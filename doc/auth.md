@@ -75,7 +75,7 @@ Google авторизация:
 /api/google/login
 В тело запроса вложить объект:
 {
-	"uid": user.uid,
+	"uid": user.providerData[0]["uid"],
         "email": user.email,
         "emailVerified": user.emailVerified,
         "displayName": user.displayName,
