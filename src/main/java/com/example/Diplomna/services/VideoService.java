@@ -58,12 +58,14 @@ public class VideoService {
         repr.setPath(video.getPath());//
         repr.setDescription(video.getDescription());
         repr.setContentType(video.getVideoCategory().toString());
+        repr.setAccessStatus(video.getAccessStatus().toString());
         return repr;
 
 
     }
-    public List<VideoMetadataRepr> findAll() {
+    public List<VideoMetadataRepr> findAll(int accessStatus) {
         return videoRepo.findAll().stream()
+                .filter(video -> video.getAccessStatus() == accessStatus)
                 .map(VideoService::convert)
                 .collect(Collectors.toList());
     }

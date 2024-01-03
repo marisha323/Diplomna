@@ -47,12 +47,25 @@ public class PlayList implements Serializable {
         this.title = title;
     }
 
-    public User getUser() {
-        return user;
-    }
+//    public User getUser() {
+//        return user;
+//    }
+//
+//    public void setUser(User user) {
+//        this.user = user;
+//    }
+public Long getUser() {
+    return user != null ? user.getId() : null;
+}
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(Long userId) {
+        if (userId != null) {
+            User user = new User();
+            user.setId(userId);
+            this.user = user;
+        } else {
+            this.user = null;
+        }
     }
 
     public AccessStatus getAccessStatus() {

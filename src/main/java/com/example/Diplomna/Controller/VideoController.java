@@ -54,7 +54,7 @@ public class VideoController {
     @GetMapping("/all")
     public List<VideoMetadataRepr> findAll()
     {
-        return videoService.findAll();
+        return videoService.findAll(3);
     }
     @GetMapping("/{id}")
     public VideoMetadataRepr findVideoMetadataById(@PathVariable("id") Long id) {

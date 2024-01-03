@@ -1,6 +1,8 @@
 package com.example.Diplomna.GrabePicture;
 
 
+import com.example.Diplomna.model.AccessStatus;
+
 //клас викор. для передачі інфи на фронт
 public class VideoMetadataRepr {
     private Long id;
@@ -10,6 +12,16 @@ public class VideoMetadataRepr {
 
     private String contentType;
     private String path;
+
+    public String getAccessStatus() {
+        return accessStatus;
+    }
+
+    public void setAccessStatus(String accessStatus) {
+        this.accessStatus = accessStatus;
+    }
+
+    private String accessStatus;
 
     public VideoMetadataRepr() {
     }
