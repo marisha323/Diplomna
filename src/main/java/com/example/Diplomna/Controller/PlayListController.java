@@ -31,7 +31,7 @@ public class PlayListController {
         this.userRepo = userRepo;
     }
 
-    @PostMapping("/add-playlist")
+    @PostMapping("/create-playlist")
     public ResponseEntity<String> playList(@RequestHeader("Authorization") String authorizationHeader, PlaylistCrm playlistCrm) {
 
         try {
@@ -40,7 +40,6 @@ public class PlayListController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Плейлист не створився");
         }
-
     }
 
     @GetMapping("/user-playlists")
@@ -52,4 +51,7 @@ public class PlayListController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
+
+
+
 }

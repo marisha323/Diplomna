@@ -47,10 +47,6 @@ public class VideoController {
 //    {
 //
 //    }
-    @PostMapping("/upload")
-    public ResponseEntity<String> handleVideoUpload() {
-        return null;
-    }
     @GetMapping("/all")
     public List<VideoMetadataRepr> findAll()
     {
@@ -60,15 +56,6 @@ public class VideoController {
     public VideoMetadataRepr findVideoMetadataById(@PathVariable("id") Long id) {
         return videoService.findById(id).orElseThrow(NotFoundException::new);
     }
-//    @GetMapping(value = "/preview/{id}", produces = MediaType.IMAGE_JPEG_VALUE)
-//    public ResponseEntity<byte[]> getPreviewPicture(@PathVariable("id") Long id) {
-//        byte[] previewBytes = videoService.getPreviewBytes(id)
-//                .orElseThrow(NotFoundException::new);
-//
-//        return ResponseEntity.ok()
-//                .contentType(MediaType.IMAGE_JPEG)
-//                .body(previewBytes);
-//    }
     @PostMapping(path = "/uploadNew", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> uploadVideo(@RequestHeader("Authorization") String authorizationHeader,NewVideoRepr newVideoRepr) {
         try {
