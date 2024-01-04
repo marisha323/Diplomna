@@ -31,7 +31,7 @@ public class AuthenticationService {
 
     public RegisterResponse register(RegisterRequest request) throws Exception {
         if (isUserExistsByEmail(request.getUserEmail())) {
-            throw new Exception("User already exist");
+            throw new Exception("User already exists");
         }
 
         var user = User.builder()
@@ -41,6 +41,8 @@ public class AuthenticationService {
                 .role(Role.USER)
                 .build();
         userRepo.save(user);
+
+        sendActivationLink(user); // Update: Call the activation logic
 
         return createRegisterResponse(user);
     }

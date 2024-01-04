@@ -46,13 +46,24 @@ public class AuthenticationController {
         }
     }
 
+    //@GetMapping("/activate")
+    //public ResponseEntity<Object> activate(Long user_id, String code) {
+        //try {
+            //return ResponseEntity.ok(activationLinkService.activate(user_id, code));
+        //} catch (Exception ex) {
+            //return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+        //}
+    //}
     @GetMapping("/activate")
-    public ResponseEntity<Object> activate(Long user_id, String code) {
+    public ResponseEntity<Object> activate(@RequestParam Long user_id, @RequestParam String code) {
         try {
-            return ResponseEntity.ok(activationLinkService.activate(user_id, code));
+            activationLinkService.activate(user_id, code);
+
+            // Assuming activation is successful, redirect to the login page
+            String redirectUrl = "http://localhost:4200/Login";
+            return ResponseEntity.status(HttpStatus.FOUND).header("Location", redirectUrl).build();
         } catch (Exception ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-
 }
