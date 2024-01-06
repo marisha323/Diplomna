@@ -14,4 +14,8 @@ public interface WatchedVideoRepo extends JpaRepository<WatchedVideo,Long> {
 
     @Query("SELECT COUNT(wv.grade) FROM WatchedVideo wv WHERE wv.video.id = :videoId AND wv.grade.id = 2")
     long countGradeDislikeForVideoId(@Param("videoId") Long videoId);
+
+
+    @Query("SELECT COUNT(wv.watchCount) FROM WatchedVideo wv WHERE wv.video.id = :videoId ")
+    long countwatchForVideoId(@Param("videoId") Long videoId);
 }

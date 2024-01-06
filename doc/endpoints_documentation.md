@@ -4,7 +4,7 @@
 //основний маппінг  /access
 
 1) /all-status - всі статуси   ;  GetMapping
-2) /{id}       - показати статус по ід  ;  приймає: id ; GetMapping
+2) /{id}       - показати статус по ід  ;  приймає: access_statusId ; GetMapping
 
 2. CommentController
 

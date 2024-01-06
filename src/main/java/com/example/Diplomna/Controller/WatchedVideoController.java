@@ -76,4 +76,10 @@ public class WatchedVideoController {
     public long countGradeDislikeForVideoId(@RequestParam Long videoId) {
         return watchedVideoService.countGradeDislikeForVideoId(videoId);
     }
+
+    @GetMapping("/count_watched")
+    public long countWatchedVideoId(@RequestParam Long videoId) {
+        return watchedVideoService.countwatchForVideoId(videoId);
+    }
+
 }

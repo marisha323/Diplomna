@@ -1,11 +1,13 @@
 package com.example.Diplomna.Controller;
 
 
-import com.example.Diplomna.model.Video;
 import com.example.Diplomna.GrabePicture.NewVideoRepr;
 import com.example.Diplomna.GrabePicture.VideoMetadataRepr;
+import com.example.Diplomna.model.WatchedVideo;
 import com.example.Diplomna.repo.VideoRepo;
+import com.example.Diplomna.repo.WatchedVideoRepo;
 import com.example.Diplomna.services.VideoService;
+import com.example.Diplomna.services.WatchedVideoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,13 +15,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
-import java.io.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -28,14 +27,20 @@ public class VideoController {
 
     @Autowired
     private VideoService videoService;
+
+    @Autowired
+    private WatchedVideoService watchedVideoService;
     private VideoRepo videoRepo;
+
+    private WatchedVideoRepo watchedVideoRepo;
     private static final Logger logger = LoggerFactory.getLogger(VideoController.class);
     @Value("${data.folder")
     private String dataFolder;
-    public VideoController(VideoRepo videoRepo)
+    public VideoController(VideoRepo videoRepo, WatchedVideoRepo watchedVideoRepo)
     {
         this.videoRepo=videoRepo;
 
+        this.watchedVideoRepo = watchedVideoRepo;
     }
     @GetMapping("/add")
     public String addCategory(Model model) {
@@ -54,6 +59,11 @@ public class VideoController {
     }
     @GetMapping("/{id}")
     public VideoMetadataRepr findVideoMetadataById(@PathVariable("id") Long id) {
+        WatchedVideo watchedVideo = new WatchedVideo();
+        watchedVideo.setWatchCount(1);
+        watchedVideo.setWatchDate(LocalDateTime.now());
+        watchedVideo.setVideo(id);
+        watchedVideoRepo.save(watchedVideo);
         return videoService.findById(id).orElseThrow(NotFoundException::new);
     }
     @PostMapping(path = "/uploadNew", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

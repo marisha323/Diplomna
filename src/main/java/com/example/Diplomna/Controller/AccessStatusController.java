@@ -28,7 +28,7 @@ public class AccessStatusController {
         return accessStatusService.findAll();
     }
     @GetMapping("/{id}")
-    public AccessStatusCrm findVideoCategoryById(@PathVariable("id") Long id) {
-        return accessStatusService.findById(id).orElseThrow(NotFoundException::new);
+    public AccessStatusCrm findVideoCategoryById(@PathVariable("id") Long access_statusId) {
+        return accessStatusService.findById(access_statusId).orElseThrow(NotFoundException::new);
     }
 }
