@@ -19,6 +19,7 @@ public class DiplomnaApplication {
 		SpringApplication.run(DiplomnaApplication.class, args);
 	}
 
+
 	@Bean
 	public CorsFilter corsFilter() {
 		CorsConfiguration corsConfiguration = new CorsConfiguration();

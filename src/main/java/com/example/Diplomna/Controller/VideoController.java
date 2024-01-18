@@ -27,7 +27,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/video")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "https://ow-ua.vercel.app/")
 public class VideoController {
 
     @Autowired
@@ -95,6 +95,7 @@ public class VideoController {
 
     @PostMapping(path = "/uploadNew", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> uploadVideo(@RequestHeader("Authorization") String authorizationHeader,NewVideoRepr newVideoRepr) {
+        logger.info("newVideoRepr"+newVideoRepr);
         try {
             videoService.uploadVideo(authorizationHeader,newVideoRepr);
             logger.info("Video saved successfully");
