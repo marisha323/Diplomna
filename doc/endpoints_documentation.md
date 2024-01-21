@@ -55,4 +55,5 @@
 2) /dislike  - зберігає дізлайк  ; - приймає:  grade_id - ід дизлайка  ІД дізлайка = 2;  video_id - ІД відео  ;  GetMapping
 3) /countlike - кількість лайків   ;  - приймає:  videoId - ІД відео;  GetMapping
 4) /countdislike - кількість дізлайків    ;  - - приймає:  videoId - ІД відео; GetMapping
+5) /count_watched - кількість переглядів - повертає кількість переглядів - приймає Long videoId;      @GetMapping
 
