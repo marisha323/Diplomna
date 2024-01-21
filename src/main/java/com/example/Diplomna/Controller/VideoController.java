@@ -42,16 +42,7 @@ public class VideoController {
 
         this.watchedVideoRepo = watchedVideoRepo;
     }
-    @GetMapping("/add")
-    public String addCategory(Model model) {
-        return "rdfigjrdifjhidh";
-    }
-    //    @PostMapping
-//    @ResponseStatus(HttpStatus.CREATED)
-//    public void uploadVideo(@RequestParam("file")MultipartFile file)
-//    {
-//
-//    }
+
     @GetMapping("/all")
     public List<VideoMetadataRepr> findAll()
     {
