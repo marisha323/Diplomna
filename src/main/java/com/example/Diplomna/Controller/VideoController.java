@@ -12,12 +12,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -42,16 +44,7 @@ public class VideoController {
 
         this.watchedVideoRepo = watchedVideoRepo;
     }
-    @GetMapping("/add")
-    public String addCategory(Model model) {
-        return "rdfigjrdifjhidh";
-    }
-    //    @PostMapping
-//    @ResponseStatus(HttpStatus.CREATED)
-//    public void uploadVideo(@RequestParam("file")MultipartFile file)
-//    {
-//
-//    }
+
     @GetMapping("/all")
     public List<VideoMetadataRepr> findAll()
     {
@@ -77,6 +70,25 @@ public class VideoController {
         }
         return ResponseEntity.status(HttpStatus.OK).build();
     }
+
+    @GetMapping("/byteVideo")
+    public ResponseEntity<?> downloadVideoByName(String name)  {
+        try {
+            byte[] videoBytes = videoService.downloadVideo(name);
+
+            return ResponseEntity.status(HttpStatus.OK)
+                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + name + ".mp4")
+                    .body(videoBytes);
+        } catch (NotFoundException exception) {
+            return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (Exception exception) {
+            return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+
     @ExceptionHandler
     public ResponseEntity<Void> notFoundExceptionHandler(NotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

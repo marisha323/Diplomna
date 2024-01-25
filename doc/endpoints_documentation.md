@@ -47,6 +47,7 @@
 1) /all-category  - повертає всі відео певної категорії ; GetMapping
 2) /{id}    - повертає відео по ід  ;  приймає - ID відео;   GetMapping
 3) /uploadNew  - завантажує відео ;  приймає - description, title, file, catrgoryId, accessStatusId
+4) /all  -  повертає всі відео в публічному статусі
 
 
 9. WatchedVideoController
@@ -55,4 +56,5 @@
 2) /dislike  - зберігає дізлайк  ; - приймає:  grade_id - ід дизлайка  ІД дізлайка = 2;  video_id - ІД відео  ;  GetMapping
 3) /countlike - кількість лайків   ;  - приймає:  videoId - ІД відео;  GetMapping
 4) /countdislike - кількість дізлайків    ;  - - приймає:  videoId - ІД відео; GetMapping
+5) /count_watched - кількість переглядів - повертає кількість переглядів - приймає Long videoId;      @GetMapping
 
