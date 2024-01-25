@@ -12,6 +12,37 @@ public class VideoMetadataRepr {
 
     private String contentType;
     private String path;
+    private Long userId;
+    private String username;
+
+    public String getPathAVA() {
+        return pathAVA;
+    }
+
+    public void setPathAVA(String pathAVA) {
+        this.pathAVA = pathAVA;
+    }
+
+    private String pathAVA;
+
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
 
     public String getAccessStatus() {
         return accessStatus;
