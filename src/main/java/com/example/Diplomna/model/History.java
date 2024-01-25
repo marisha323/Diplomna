@@ -19,6 +19,15 @@ public class History implements Serializable {
     private Video video;
     private LocalDateTime dateTime;
 
+    public History() {
+    }
+
+    public History(Long id, User user, Video video, LocalDateTime dateTime) {
+        this.id = id;
+        this.user = user;
+        this.video = video;
+        this.dateTime = dateTime;
+    }
     @Override
     public String toString() {
         return "History{" +
@@ -37,22 +46,50 @@ public class History implements Serializable {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+//    public User getUser() {
+//        return user;
+//    }
+//
+//    public void setUser(User user) {
+//        this.user = user;
+//    }
+
+
+    public Long getUser() {
+        return user != null ? user.getId() : null;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(Long userId) {
+        if (userId != null) {
+            User user = new User();
+            user.setId(userId);
+            this.user = user;
+        } else {
+            this.user = null;
+        }
     }
+//    public Video getVideo() {
+//        return video;
+//    }
+//
+//    public void setVideo(Video video) {
+//        this.video = video;
+//    }
 
-    public Video getVideo() {
-        return video;
+
+    public Long getVideo() {
+        return video != null ? video.getId() : null;}
+
+
+    public void setVideo(Long video_id) {
+        if (video_id != null) {
+            Video video = new Video();
+            video.setId(video_id);
+            this.video = video;
+        } else {
+            this.video = null;
+        }
     }
-
-    public void setVideo(Video video) {
-        this.video = video;
-    }
-
     public LocalDateTime getDateTime() {
         return dateTime;
     }
@@ -61,10 +98,5 @@ public class History implements Serializable {
         this.dateTime = dateTime;
     }
 
-    public History(Long id, User user, Video video, LocalDateTime dateTime) {
-        this.id = id;
-        this.user = user;
-        this.video = video;
-        this.dateTime = dateTime;
-    }
+
 }
