@@ -53,6 +53,15 @@ public class VideoMetadataRepr {
     }
 
     private String accessStatus;
+    private byte[] avatarBytes;
+
+    public byte[] getAvatarBytes() {
+        return avatarBytes;
+    }
+
+    public void setAvatarBytes(byte[] avatarBytes) {
+        this.avatarBytes = avatarBytes;
+    }
 
     public VideoMetadataRepr() {
     }

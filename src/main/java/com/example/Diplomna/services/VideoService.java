@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -37,7 +38,7 @@ public class VideoService {
     private final Logger logger = LoggerFactory.getLogger(VideoService.class);
     @Value("${data.folder}")
     private String dataFolder;
-    private UserRepo userRepo;
+    private static UserRepo userRepo;
     @Autowired
     private UserService userService;
 
@@ -57,7 +58,15 @@ public class VideoService {
         repr.setAccessStatus(video.getAccessStatus().toString());
         repr.setUserId(video.getUser());
         repr.setUsername(user.getUserName());
+
         repr.setPathAVA(user.getPhotoUrl());
+        try {
+            byte[] avatarBytes = downloadAvaUser(user.getId());
+            repr.setAvatarBytes(avatarBytes);
+        } catch (IOException e) {
+            // Обробити помилку завантаження аватарки
+            e.printStackTrace();
+        }
         return repr;
 
 
@@ -121,6 +130,12 @@ public class VideoService {
 
     }
 
+
+    public static byte[] downloadAvaUser(Long id) throws IOException {
+        User user = userRepo.findById(id).orElseThrow(() -> new NotFoundException());
+
+        return Files.readAllBytes(new File(user.getPhotoUrl()).toPath());
+    }
 
 
     public List<Video> getVideosByCategoryId(Long videoCategoryId) {
