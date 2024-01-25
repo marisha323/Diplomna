@@ -3,6 +3,7 @@ package com.example.Diplomna.services;
 
 import com.example.Diplomna.GrabePicture.NewVideoRepr;
 import com.example.Diplomna.classValid.CrmHelper;
+import com.example.Diplomna.enums.NotFoundException;
 import com.example.Diplomna.model.User;
 import com.example.Diplomna.model.Video;
 import com.example.Diplomna.GrabePicture.VideoMetadataRepr;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
