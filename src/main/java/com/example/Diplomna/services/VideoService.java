@@ -3,11 +3,9 @@ package com.example.Diplomna.services;
 
 import com.example.Diplomna.GrabePicture.NewVideoRepr;
 import com.example.Diplomna.classValid.CrmHelper;
-import com.example.Diplomna.enums.NotFoundException;
 import com.example.Diplomna.model.User;
 import com.example.Diplomna.model.Video;
 import com.example.Diplomna.GrabePicture.VideoMetadataRepr;
-import com.example.Diplomna.model.VideoCategory;
 import com.example.Diplomna.repo.UserRepo;
 import com.example.Diplomna.repo.VideoRepo;
 import jakarta.transaction.Transactional;
@@ -15,17 +13,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -42,7 +33,6 @@ import java.util.stream.Stream;
 @Service
 public class VideoService {
     private final VideoRepo videoRepo;
-
     private final Logger logger = LoggerFactory.getLogger(VideoService.class);
     @Value("${data.folder}")
     private String dataFolder;
@@ -55,9 +45,6 @@ public class VideoService {
         this.userRepo = userRepo;
         this.videoRepo = videoRepo;
     }
-
-
-
     private static VideoMetadataRepr convert(Video video, User user) {
         VideoMetadataRepr repr = new VideoMetadataRepr();
 

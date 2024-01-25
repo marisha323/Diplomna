@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface VideoRepo extends JpaRepository<Video,Long> {
@@ -19,5 +20,7 @@ public interface VideoRepo extends JpaRepository<Video,Long> {
     List<Video> findByVideoCategory_Id(Long videoCategoryId);
 
     List<Video> findByTitleContaining(String title);
+
+    Optional<Video> findByTitle(String yourPropertyName);
 
 }
