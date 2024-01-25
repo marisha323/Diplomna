@@ -59,7 +59,7 @@ public class VideoService {
         repr.setUserId(video.getUser());
         repr.setUsername(user.getUserName());
 
-
+        repr.setPathAVA(user.getPhotoUrl());
         try {
             byte[] avatarBytes = downloadAvaUser(user.getId());
             repr.setAvatarBytes(avatarBytes);
