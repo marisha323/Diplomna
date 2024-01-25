@@ -3,6 +3,7 @@ package com.example.Diplomna.services;
 
 import com.example.Diplomna.GrabePicture.NewVideoRepr;
 import com.example.Diplomna.classValid.CrmHelper;
+import com.example.Diplomna.enums.NotFoundException;
 import com.example.Diplomna.model.User;
 import com.example.Diplomna.model.Video;
 import com.example.Diplomna.GrabePicture.VideoMetadataRepr;
@@ -111,6 +112,16 @@ public class VideoService {
                 }
         }
     }
+
+    public byte[] downloadVideo(String name) throws IOException {
+        Video video = videoRepo.findByTitle(name).orElseThrow(() -> new NotFoundException());
+
+        return Files.readAllBytes(new File(video.getPath()).toPath());
+
+    }
+
+
+
     public List<Video> getVideosByCategoryId(Long videoCategoryId) {
         return videoRepo.findByVideoCategory_Id(videoCategoryId);
     }
