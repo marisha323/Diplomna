@@ -6,7 +6,6 @@ import com.example.Diplomna.classValid.CrmHelper;
 import com.example.Diplomna.model.User;
 import com.example.Diplomna.model.Video;
 import com.example.Diplomna.GrabePicture.VideoMetadataRepr;
-import com.example.Diplomna.model.VideoCategory;
 import com.example.Diplomna.repo.UserRepo;
 import com.example.Diplomna.repo.VideoRepo;
 import jakarta.transaction.Transactional;
@@ -14,17 +13,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -33,6 +25,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 //import static java.nio.file.AccessMode.WRITE;
 
@@ -44,13 +37,15 @@ public class VideoService {
     @Value("${data.folder}")
     private String dataFolder;
     private UserRepo userRepo;
+    @Autowired
+    private UserService userService;
 
     @Autowired
     public VideoService(VideoRepo videoRepo, UserRepo userRepo) {
         this.userRepo = userRepo;
         this.videoRepo = videoRepo;
     }
-    private static VideoMetadataRepr convert(Video video) {
+    private static VideoMetadataRepr convert(Video video, User user) {
         VideoMetadataRepr repr = new VideoMetadataRepr();
 
         repr.setId(video.getId());
@@ -59,6 +54,9 @@ public class VideoService {
         repr.setDescription(video.getDescription());
         repr.setContentType(video.getVideoCategory().toString());
         repr.setAccessStatus(video.getAccessStatus().toString());
+        repr.setUserId(video.getUser());
+        repr.setUsername(user.getUserName());
+        repr.setPathAVA(user.getPhotoUrl());
         return repr;
 
 
@@ -66,12 +64,15 @@ public class VideoService {
     public List<VideoMetadataRepr> findAll(int accessStatus) {
         return videoRepo.findAll().stream()
                 .filter(video -> video.getAccessStatus() == accessStatus)
-                .map(VideoService::convert)
+                .flatMap(video -> userService.findUserById(video.getUser())
+                        .map(user -> Stream.of(convert(video, user)))
+                        .orElseGet(Stream::empty))
                 .collect(Collectors.toList());
     }
     public Optional<VideoMetadataRepr> findById(Long id) {
         return videoRepo.findById(id)
-                .map(VideoService::convert);
+                .flatMap(video -> userService.findUserById(video.getUser())
+                        .map(user -> convert(video, user)));
     }
     @Transactional
     public void uploadVideo(String authorizationHeader, NewVideoRepr newVideoRepr) {
