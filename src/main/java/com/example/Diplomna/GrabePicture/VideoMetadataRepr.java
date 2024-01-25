@@ -22,6 +22,17 @@ public class VideoMetadataRepr {
     }
 
     private String accessStatus;
+    private String avatarPath;
+
+    public String getAvatarPath() {
+        return avatarPath;
+    }
+
+    public void setAvatarPath(String avatarPath) {
+        this.avatarPath = avatarPath;
+    }
+
+
 
     public VideoMetadataRepr() {
     }

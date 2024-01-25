@@ -41,6 +41,7 @@ import java.util.stream.Collectors;
 @Service
 public class VideoService {
     private final VideoRepo videoRepo;
+
     private final Logger logger = LoggerFactory.getLogger(VideoService.class);
     @Value("${data.folder}")
     private String dataFolder;
@@ -52,6 +53,8 @@ public class VideoService {
         this.videoRepo = videoRepo;
     }
     private static VideoMetadataRepr convert(Video video) {
+
+
         VideoMetadataRepr repr = new VideoMetadataRepr();
 
         repr.setId(video.getId());
@@ -60,6 +63,8 @@ public class VideoService {
         repr.setDescription(video.getDescription());
         repr.setContentType(video.getVideoCategory().toString());
         repr.setAccessStatus(video.getAccessStatus().toString());
+
+        //repr.setAvatarPath(video.getUser());
         return repr;
 
 
@@ -120,6 +125,12 @@ public class VideoService {
 
     }
 
+
+    public byte[] downloadAvaUser(Long id) throws IOException {
+        User user = userRepo.findById(id).orElseThrow(() -> new NotFoundException());
+
+        return Files.readAllBytes(new File(user.getPhotoUrl()).toPath());
+    }
 
 
     public List<Video> getVideosByCategoryId(Long videoCategoryId) {
