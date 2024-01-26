@@ -99,7 +99,7 @@ public class VideoController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @GetMapping("/byteVideo")
+    @PostMapping("/byteVideo")
     public ResponseEntity<?> downloadVideoByName(String name)  {
         try {
             byte[] videoBytes = videoService.downloadVideo(name);
