@@ -7,9 +7,7 @@ import com.example.Diplomna.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.Diplomna.services.UserService;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @RestController
@@ -39,7 +38,10 @@ public class UserController {
     @Autowired
     private UserService userService;
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
+    @Autowired
     private UserRepo userRepo;
+
     public UserController(UserRepo userRepo) {
         this.userRepo = userRepo;
     }
@@ -73,4 +75,19 @@ public class UserController {
         return crmHelper.userId(authorizationHeader);
     }
 
+
+
+@GetMapping("/avatar")
+public ResponseEntity<byte[]> getUserAvatar(@RequestParam Long userId) {
+    try {
+        byte[] avatarBytes = UserService.toByteArray(userId);
+        return ResponseEntity.ok().body(avatarBytes);
+    } catch (IOException e) {
+        e.printStackTrace();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    } catch (NotFoundException e) {
+        e.printStackTrace();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+}
 }
