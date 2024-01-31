@@ -19,8 +19,16 @@ public class Subscription implements Serializable {
     private User user_target ;
 
     private LocalDateTime dateTime;
-
     private boolean Unsubscribed;
+    public boolean isUnsubscribed() {
+        return Unsubscribed;
+    }
+
+    public void setUnsubscribed(boolean unsubscribed) {
+        Unsubscribed = unsubscribed;
+    }
+
+
 
     public Subscription() {
 
@@ -44,22 +52,32 @@ public class Subscription implements Serializable {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public Long getUser() {
+        return user != null ? user.getId() : null;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(Long userId) {
+        if (userId != null) {
+            User user = new User();
+            user.setId(userId);
+            this.user = user;
+        } else {
+            this.user = null;
+        }
+    }
+    public Long getUser_target() {
+        return user_target != null ? user_target.getId() : null;
     }
 
-    public User getUser_target() {
-        return user_target;
+    public void setUser_target(Long user_target) {
+        if (user_target != null) {
+            User user = new User();
+            user.setId(user_target);
+            this.user_target = user;
+        } else {
+            this.user_target = null;
+        }
     }
-
-    public void setUser_target(User user_target) {
-        this.user_target = user_target;
-    }
-
     public LocalDateTime getDateTime() {
         return dateTime;
     }
