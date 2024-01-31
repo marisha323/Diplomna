@@ -48,7 +48,7 @@ public class CommentController {
             comment.setDateTime(LocalDateTime.now());
             logger.info("comment" + comment);
             commentRepo.save(comment);
-            return "jjkj";
+            return "Comment added successfully";
         }
         else {
             return "ERROR";
