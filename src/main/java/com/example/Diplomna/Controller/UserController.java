@@ -2,6 +2,7 @@ package com.example.Diplomna.Controller;
 
 import com.example.Diplomna.classValid.AddImgUser;
 import com.example.Diplomna.classValid.CrmHelper;
+import com.example.Diplomna.classValid.UserCrm;
 import com.example.Diplomna.model.User;
 import com.example.Diplomna.services.UserService;
 import org.slf4j.Logger;
@@ -73,4 +74,14 @@ public class UserController {
         return crmHelper.userId(authorizationHeader);
     }
 
+    @PutMapping("/edit")
+    public ResponseEntity<User> editUser(@RequestHeader("Authorization") String authorizationHeader,
+                                         @RequestBody UserCrm editedUser           ) {
+        try {
+            User updatedUser = userService.editUser(authorizationHeader, editedUser);
+            return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+        } catch (NotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 }
