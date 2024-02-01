@@ -3,7 +3,9 @@ package com.example.Diplomna.Controller;
 import com.example.Diplomna.classValid.AddImgUser;
 import com.example.Diplomna.classValid.CrmHelper;
 import com.example.Diplomna.classValid.UserCrm;
+import com.example.Diplomna.model.Channel;
 import com.example.Diplomna.model.User;
+import com.example.Diplomna.repo.ChannelRepo;
 import com.example.Diplomna.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,15 +34,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.Diplomna.services.UserService;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
 public class UserController {
+
     @Autowired
     private UserService userService;
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+    @Autowired
     private UserRepo userRepo;
+
+    @Autowired
+    private ChannelRepo channelRepo;
     public UserController(UserRepo userRepo) {
         this.userRepo = userRepo;
     }
@@ -74,14 +82,43 @@ public class UserController {
         return crmHelper.userId(authorizationHeader);
     }
 
-    @PutMapping("/edit")
+    @PostMapping(path = "/editblala", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<User> editUser(@RequestHeader("Authorization") String authorizationHeader,
-                                         @RequestBody UserCrm editedUser           ) {
-        try {
+                                          UserCrm editedUser ) throws IOException {
+logger.info("nriihjihni4thnhh");
             User updatedUser = userService.editUser(authorizationHeader, editedUser);
             return new ResponseEntity<>(updatedUser, HttpStatus.OK);
-        } catch (NotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+    }
+
+    @PostMapping(path = "/update-banner", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public String updateBanner(@RequestHeader("Authorization") String authorizationHeader, AddImgUser user) {
+        CrmHelper crmHelper = new CrmHelper(userRepo);
+        Long userId = crmHelper.userId(authorizationHeader);
+
+        if (userId != null) {
+           Optional<Channel> channelOptional = channelRepo.findByUserId(userId);
+
+            if (channelOptional.isPresent()) {
+                Channel channel = channelOptional.get();
+                MultipartFile file = user.getPhotoUrl();
+                String imageUrl = String.valueOf(userService.addImgAva(file));
+
+                logger.info("Service File Name: " + imageUrl);
+                logger.info("UserId: " + userId);
+
+                // Оновлення шляху банера для користувача
+                channel.setBannerPath(imageUrl);
+                channelRepo.save(channel);
+
+                return imageUrl;
+            } else {
+                return "User or Channel not found";
+            }
+        } else {
+            return "Unauthorized";
         }
     }
+
+
 }

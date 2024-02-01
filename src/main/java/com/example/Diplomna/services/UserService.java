@@ -11,6 +11,7 @@ import com.example.Diplomna.repo.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -19,14 +20,18 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
-    private final UserRepo userRepository;
+
+    @Autowired
+    private UserRepo userRepository;
     private final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     public Optional<User> findByEmail(String email) {
@@ -56,48 +61,43 @@ public class UserService {
     }
 
 
-
-//    public User editUser(String authorizationHeader, UserCrm editedUser, MultipartFile photo) {
-//        Long userId = CrmHelper.userId(authorizationHeader);
-//        Optional<User> userOptional = userRepository.findById(userId);
-//
-//        if (userOptional.isPresent()) {
-//            User existingUser = userOptional.get();
-//
-//            // Перевірка, чи передано нове фото
-//            if (photo != null && !photo.isEmpty()) {
-//                String newImageUrl = addImgAva(photo);
-//                existingUser.setPhotoUrl(newImageUrl);
-//            }
-//
-//            // Останні зміни
-//            existingUser.setUserName(editedUser.getUserName());
-//            existingUser.setEmail(editedUser.getEmail());
-//            existingUser.setPassword(editedUser.getPassword());
-//
-//            return userRepository.save(existingUser);
-//        } else {
-//            throw new NotFoundException("User not found");
-//        }
-//    }
-public User editUser(String authorizationHeader, UserCrm editedUser) {
+public User editUser(String authorizationHeader, UserCrm editedUser) throws IOException {
+logger.info("authorizationHeader: "+ authorizationHeader);
     Long userId = CrmHelper.userId(authorizationHeader);
     Optional<User> userOptional = userRepository.findById(userId);
-
     if (userOptional.isPresent()) {
         User existingUser = userOptional.get();
 
         // Останні зміни
         existingUser.setUserName(editedUser.getUserName());
         existingUser.setEmail(editedUser.getEmail());
-        existingUser.setPassword(editedUser.getPassword());
+        //existingUser.setPassword(editedUser.getPassword());
         existingUser.setExternalId("1");
         existingUser.setActivated(true);
+        logger.info("USER NAME" + existingUser.getUserName());
+        // IMAGE
+        MultipartFile file = editedUser.getPhotoUrl();
+        if (file != null && !file.isEmpty()) {
+            String folderPath = "src/main/resources/user/";
+            File folder = new File(folderPath);
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+
+            String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+            Path filePath = Paths.get(folderPath, fileName);
+            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+            existingUser.setPhotoUrl(fileName);
+        }
+
         return userRepository.save(existingUser);
     } else {
         throw new NotFoundException("User not found");
     }
 }
 
-
 }
+
+
+

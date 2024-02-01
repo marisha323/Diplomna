@@ -13,10 +13,8 @@ public class Channel implements Serializable {
     @OneToOne
     @JoinColumn(name = "ownerId")
     private User user;
-    @OneToOne
-    @JoinColumn(name = "bannerId")
-    private File banner;
-    private String description;
+    private String bannerPath;
+
 
     public Long getId() {
         return id;
@@ -26,27 +24,25 @@ public class Channel implements Serializable {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public Long getUser() {
+        return user != null ? user.getId() : null;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(Long userId) {
+        if (userId != null) {
+            User user = new User();
+            user.setId(userId);
+            this.user = user;
+        } else {
+            this.user = null;
+        }
+    }
+    public String getBannerPath() {
+        return bannerPath;
     }
 
-    public File getBanner() {
-        return banner;
+    public void setBannerPath(String bannerPath) {
+        this.bannerPath = bannerPath;
     }
 
-    public void setBanner(File banner) {
-        this.banner = banner;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 }
