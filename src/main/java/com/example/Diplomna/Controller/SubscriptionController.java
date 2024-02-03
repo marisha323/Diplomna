@@ -25,10 +25,10 @@ public class SubscriptionController {
     public ResponseEntity<?> addSubscription(@RequestHeader("Authorization") String authorizationHeader, SubscriptionCrm subscriptionCrm) {
         try {
             subscriptionService.addSubscription(authorizationHeader, subscriptionCrm);
+            return ResponseEntity.status(HttpStatus.OK).build();
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @GetMapping("/get-video-sub-user")

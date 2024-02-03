@@ -10,13 +10,37 @@ public class Channel implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false,updatable = false)
     private Long id;
+
+
     @OneToOne
     @JoinColumn(name = "ownerId")
     private User user;
-    @OneToOne
-    @JoinColumn(name = "bannerId")
-    private File banner;
-    private String description;
+    private String bannerPath;
+//    private String description;
+
+    public Channel(Long id, User user, String bannerPath, String description) {
+        this.id = id;
+        this.user = user;
+        this.bannerPath = bannerPath;
+
+    }
+
+    public Long getUser() {
+        return user != null ? user.getId() : null;
+    }
+
+    public void setUser(Long userId) {
+        if (userId != null) {
+            User user = new User();
+            user.setId(userId);
+            this.user = user;
+        } else {
+            this.user = null;
+        }
+    }
+    public Channel() {
+
+    }
 
     public Long getId() {
         return id;
@@ -26,27 +50,14 @@ public class Channel implements Serializable {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+
+
+    public String getBannerPath() {
+        return bannerPath;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setBannerPath(String bannerPath) {
+        this.bannerPath = bannerPath;
     }
 
-    public File getBanner() {
-        return banner;
-    }
-
-    public void setBanner(File banner) {
-        this.banner = banner;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 }

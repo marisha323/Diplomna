@@ -33,6 +33,7 @@ import java.util.stream.Stream;
 @Service
 public class SubscriptionService {
     private final SubscriptionRepo subscriptionRepo;
+
     private static UserRepo userRepo;
     private static VideoRepo videoRepo;
     private final Logger logger = LoggerFactory.getLogger(SubscriptionService.class);

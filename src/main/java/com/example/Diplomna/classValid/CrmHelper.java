@@ -15,11 +15,12 @@ import java.util.Optional;
 public class CrmHelper {
     private static final String SECRET_KEY = "438cfffbf78a11313266c90207250b6a863db87595ecf9c6841562223cb3aa41";
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
-    private static UserRepo userRepo;
+    private final UserRepo userRepo;
+
     public CrmHelper(UserRepo userRepo) {
         this.userRepo = userRepo;
     }
-    private static String decodeTokenAndGetUserId(String token) {
+    private  String decodeTokenAndGetUserId(String token) {
         // Розкодуйте токен і отримайте його клейми
         logger.info("TOKEN: " + token);
         Claims claims = Jwts.parser()
@@ -30,7 +31,7 @@ public class CrmHelper {
         return claims.get("sub", String.class);  // Отримайте ідентифікатор користувача з клеймів
     }
 
-    public static Long userId(String authorizationHeader) {
+    public  Long userId(String authorizationHeader) {
         try {
 
             logger.info("Auth: " + authorizationHeader);
