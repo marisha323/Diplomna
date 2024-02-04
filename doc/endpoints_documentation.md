@@ -49,6 +49,7 @@
 3) /uploadNew  - завантажує відео ;  приймає - description, title, file, catrgoryId, accessStatusId
 4) /all  -  повертає всі відео в публічному статусі
 5) /byteVideo  - повертає масив байтів відео по його назві. Приймає назву відео(name) ; GetMapping
+6) /count_videoOfMyChannel - повертає кількість відео авторизованого користувача  ; GetMapping
 
 
 9. WatchedVideoController
@@ -59,3 +60,8 @@
 4) /countdislike - кількість дізлайків    ;  - - приймає:  videoId - ІД відео; GetMapping
 5) /count_watched - кількість переглядів - повертає кількість переглядів - приймає Long videoId;      @GetMapping
 
+10. SubscriptionController
+  //      - /subs
+1)/count_subscriptionMyChannel - повертає кількість підписників на мій канал  ; GetMapping
+2) /add-sub - додає підписників на мій канал ; PostMapping
+3) /get-video-sub-user  - повертає колекцію відео тих каналів на які я підписана за останній місяць  ; @GetMapping

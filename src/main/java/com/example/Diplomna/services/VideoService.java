@@ -149,4 +149,10 @@ public class VideoService {
     public boolean existsById(Long id) {
         return videoRepo.existsById(id);
     }
+
+
+    public long countVideoOfMyChannel(Long id) {
+        return videoRepo.countVideoId(id);
+    }
+
 }

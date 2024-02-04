@@ -36,4 +36,13 @@ public class SubscriptionController {
 
         return subscriptionService.getVideoSubUser(authorizationHeader);
     }
+
+
+    @GetMapping("/count_subscriptionMyChannel")
+    public long countVideoOfMyChannel(@RequestHeader("Authorization") String authorizationHeader) {
+        CrmHelper crmHelper = new CrmHelper(userRepo);
+        Long userId = crmHelper.userId(authorizationHeader);
+        return subscriptionService.countSubscription(userId);
+    }
+
 }
