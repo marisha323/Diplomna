@@ -106,4 +106,9 @@ public class SubscriptionService {
         logger.info("subscribedVideos: " + subscribedVideos);
         return ResponseEntity.ok(subscribedVideos);
     }
+
+    public long countSubscription(Long id) {
+        return subscriptionRepo.countSubscribers(id);
+    }
+
 }
