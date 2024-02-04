@@ -121,6 +121,13 @@ public class VideoController {
     public ResponseEntity<Void> notFoundExceptionHandler(NotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
+
+    @GetMapping("/count_videoOfMyChannel")
+    public long countVideoOfMyChannel(@RequestHeader("Authorization") String authorizationHeader) {
+        CrmHelper crmHelper = new CrmHelper(userRepo);
+        Long userId = crmHelper.userId(authorizationHeader);
+        return videoService.countVideoOfMyChannel(userId);
+    }
 }
 
 

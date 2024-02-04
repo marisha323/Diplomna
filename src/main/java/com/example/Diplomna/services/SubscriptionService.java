@@ -12,4 +12,10 @@ public class SubscriptionService {
     public SubscriptionService(SubscriptionRepo subscriptionRepo) {
         this.subscriptionRepo = subscriptionRepo;
     }
+
+
+    public long countVideoOfMyChannel(Long id) {
+        return subscriptionRepo.countSubscribers(id);
+    }
+
 }
