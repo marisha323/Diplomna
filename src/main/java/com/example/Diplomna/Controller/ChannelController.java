@@ -29,4 +29,9 @@ public class ChannelController {
         return channelService.chanelUser(authorizationHeader);
 
     }
+
+    @GetMapping("/channel-user-video")
+    public List<?> channelUserVideo(@RequestHeader("Authorization") String authorizationHeader) {
+        return channelService.getAllVideosForUser(authorizationHeader);
+    }
 }

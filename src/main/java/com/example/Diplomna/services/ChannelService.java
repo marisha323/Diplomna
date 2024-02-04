@@ -1,13 +1,14 @@
 package com.example.Diplomna.services;
 
 import com.example.Diplomna.GrabePicture.ChannelResponseConvert;
-import com.example.Diplomna.GrabePicture.VideoWithUserInfo;
 import com.example.Diplomna.classValid.CrmHelper;
 import com.example.Diplomna.enums.NotFoundException;
 import com.example.Diplomna.model.Channel;
 import com.example.Diplomna.model.User;
+import com.example.Diplomna.model.Video;
 import com.example.Diplomna.repo.ChannelRepo;
 import com.example.Diplomna.repo.UserRepo;
+import com.example.Diplomna.repo.VideoRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,14 +25,17 @@ import java.util.stream.Stream;
 public class ChannelService {
     private final ChannelRepo channelRepo;
     private static UserRepo userRepo;
+
+    private VideoRepo videoRepo;
     private final Logger logger = LoggerFactory.getLogger(PlayListService.class);
     private ChannelResponseConvert channelResponseConvert;
 
 
     @Autowired
-    public ChannelService(ChannelRepo channelRepo, UserRepo userRepo) {
+    public ChannelService(ChannelRepo channelRepo, UserRepo userRepo, VideoRepo videoRepo) {
         this.channelRepo = channelRepo;
         this.userRepo = userRepo;
+        this.videoRepo = videoRepo;
     }
     public static byte[] downloadAvaUser(Long id) throws IOException {
         User user = userRepo.findById(id).orElseThrow(() -> new NotFoundException());
@@ -76,4 +80,11 @@ public class ChannelService {
         return subscribedVideos;
     }
 
+
+    public List<Video> getAllVideosForUser(String authorizationHeader) {
+        CrmHelper crmHelper = new CrmHelper(userRepo);
+        Long userId = crmHelper.userId(authorizationHeader);
+        logger.info("userId " + userId);
+        return videoRepo.findByOwnerId_Id(userId);
+    }
 }
