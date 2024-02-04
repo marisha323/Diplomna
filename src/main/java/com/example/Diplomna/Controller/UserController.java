@@ -7,29 +7,15 @@ import com.example.Diplomna.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.Diplomna.model.User;
-import com.example.Diplomna.classValid.CrmHelper;
 import com.example.Diplomna.repo.UserRepo;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.example.Diplomna.services.UserService;
 
 import java.util.Optional;
 
@@ -39,13 +25,14 @@ public class UserController {
     @Autowired
     private UserService userService;
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
-    private UserRepo userRepo;
+    private static UserRepo userRepo;
+
     public UserController(UserRepo userRepo) {
         this.userRepo = userRepo;
     }
 
     @PostMapping(path = "/update-image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public String updateImageUrl(@RequestHeader("Authorization") String authorizationHeader,AddImgUser user) {
+    public String updateImageUrl(@RequestHeader("Authorization") String authorizationHeader, AddImgUser user) {
         CrmHelper crmHelper = new CrmHelper(userRepo);
         Long userId = crmHelper.userId(authorizationHeader);
         if (userId != null) {
@@ -66,11 +53,13 @@ public class UserController {
             return "Unauthorized";
         }
     }
+
     @GetMapping("/getUserId")
     public Long getUserId(@RequestHeader("Authorization") String authorizationHeader) {
         CrmHelper crmHelper = new CrmHelper(userRepo);
 
         return crmHelper.userId(authorizationHeader);
     }
+
 
 }

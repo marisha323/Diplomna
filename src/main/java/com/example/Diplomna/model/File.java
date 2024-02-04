@@ -14,6 +14,10 @@ public class File implements Serializable {
 
     private String path;
 
+    public File() {
+
+    }
+
     @Override
     public String toString() {
         return "File{" +

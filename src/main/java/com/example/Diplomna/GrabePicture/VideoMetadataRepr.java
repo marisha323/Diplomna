@@ -14,6 +14,17 @@ public class VideoMetadataRepr {
     private String path;
     private Long userId;
     private String username;
+    private byte[] avatarBytes;
+    private String accessStatus;
+    private String avatarPath;
+
+    public byte[] getAvatarBytes() {
+        return avatarBytes;
+    }
+
+    public void setAvatarBytes(byte[] avatarBytes) {
+        this.avatarBytes = avatarBytes;
+    }
 
     public String getPathAVA() {
         return pathAVA;
@@ -52,8 +63,7 @@ public class VideoMetadataRepr {
         this.accessStatus = accessStatus;
     }
 
-    private String accessStatus;
-    private String avatarPath;
+
 
     public String getAvatarPath() {
         return avatarPath;

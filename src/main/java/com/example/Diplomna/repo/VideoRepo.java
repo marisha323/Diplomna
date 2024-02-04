@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +27,9 @@ public interface VideoRepo extends JpaRepository<Video,Long> {
 
     Optional<Video> findByTitle(String yourPropertyName);
 
+    @Query("SELECT v FROM Video v WHERE v.ownerId.id IN :userIds AND DATE(v.uploadDate) BETWEEN :startDate AND :endDate")
+    List<Video> findVideosByUserIdsAndDateRange(@Param("userIds") List<Long> userIds, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
+    List<Video> findByOwnerId_Id(Long ownerId);
     @Query("SELECT COUNT(v.id) FROM Video v WHERE v.ownerId.id = :userId")
     long countVideoId(@Param("userId") Long userId);
 
