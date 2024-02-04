@@ -115,6 +115,13 @@ public class VideoController {
         }
     }
 
+    @GetMapping("/count_videoOfMyChannel")
+    public long countVideoOfMyChannel(@RequestHeader("Authorization") String authorizationHeader) {
+        CrmHelper crmHelper = new CrmHelper(userRepo);
+        Long userId = crmHelper.userId(authorizationHeader);
+        return videoService.countVideoOfMyChannel(userId);
+    }
+
 
 
     @ExceptionHandler
