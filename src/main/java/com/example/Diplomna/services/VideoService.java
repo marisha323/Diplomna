@@ -43,6 +43,8 @@ public class VideoService {
     @Autowired
     private UserService userService;
 
+
+
     @Autowired
     public VideoService(VideoRepo videoRepo, UserRepo userRepo) {
         this.userRepo = userRepo;
@@ -154,5 +156,10 @@ public class VideoService {
     public long countVideoOfMyChannel(Long id) {
         return videoRepo.countVideoId(id);
     }
+
+
+
+
+
 
 }

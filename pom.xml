@@ -110,6 +110,11 @@
 			<version>1.5.5</version>
 		</dependency>
 
+		<dependency>
+			<groupId>com.google.firebase</groupId>
+			<artifactId>firebase-admin</artifactId>
+			<version>8.0.0</version> <!-- Проверьте актуальную версию на сайте Firebase -->
+		</dependency>
 	</dependencies>
 
 	<build>

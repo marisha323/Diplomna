@@ -10,6 +10,7 @@ import com.example.Diplomna.repo.HistoryRepo;
 import com.example.Diplomna.repo.UserRepo;
 import com.example.Diplomna.repo.VideoRepo;
 import com.example.Diplomna.repo.WatchedVideoRepo;
+import com.example.Diplomna.services.FirebaseService;
 import com.example.Diplomna.services.VideoService;
 import com.example.Diplomna.services.WatchedVideoService;
 import org.slf4j.Logger;
@@ -22,6 +23,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -37,6 +39,8 @@ public class VideoController {
 
     @Autowired
     private WatchedVideoService watchedVideoService;
+    @Autowired
+    private FirebaseService firebaseService;
     private VideoRepo videoRepo;
 
     private WatchedVideoRepo watchedVideoRepo;
@@ -85,6 +89,13 @@ public class VideoController {
                     .body("ID cannot be null");
         }
     }
+    @GetMapping("/list-video")
+    public ResponseEntity<?> listVideo(Long videoId){
+
+
+        return null;
+    }
+
 
     @PostMapping(path = "/uploadNew", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> uploadVideo(@RequestHeader("Authorization") String authorizationHeader,NewVideoRepr newVideoRepr) {
@@ -121,7 +132,10 @@ public class VideoController {
         Long userId = crmHelper.userId(authorizationHeader);
         return videoService.countVideoOfMyChannel(userId);
     }
-
+    @PostMapping("/upload")
+    public String uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
+        return firebaseService.uploadFile(file);
+    }
 
 
     @ExceptionHandler
