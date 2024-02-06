@@ -56,4 +56,10 @@ public class SubscriptionController {
         List<User> subscribedUsers = subscriptionService.getSubscribedUsers(authorizationHeader);
         return ResponseEntity.ok(subscribedUsers);
     }
+    @DeleteMapping("/unsubscribe")
+    private ResponseEntity<String> getUserIdFromAuthorizationHeader(@RequestHeader("Authorization") String authorizationHeader,Long targetUserId) {
+        subscriptionService.unsubscribe(authorizationHeader,targetUserId);
+        return new ResponseEntity<>("Unsubscribed successfully", HttpStatus.OK);
+
+    }
 }

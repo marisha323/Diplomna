@@ -117,6 +117,16 @@ public class SubscriptionService {
         return subscriptionRepo.countSubscribers(id);
     }
 
+    public void unsubscribe(String authorizationHeader, Long targetUserId) {
+        CrmHelper crmHelper = new CrmHelper(userRepo);
+        Long userId = crmHelper.userId(authorizationHeader);
+        Subscription subscription = subscriptionRepo.findByUserIdAndTargetUserId(userId, targetUserId);
+
+        if (subscription != null) {
+            subscriptionRepo.delete(subscription);
+        }
+    }
+
 
     public List<User> getSubscribedUsers(@RequestHeader("Authorization") String authorizationHeader) {
         CrmHelper crmHelper = new CrmHelper(userRepo);
