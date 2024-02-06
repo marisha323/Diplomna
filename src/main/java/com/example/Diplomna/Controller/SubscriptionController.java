@@ -2,6 +2,7 @@ package com.example.Diplomna.Controller;
 
 import com.example.Diplomna.classValid.CrmHelper;
 import com.example.Diplomna.classValid.SubscriptionCrm;
+import com.example.Diplomna.model.User;
 import com.example.Diplomna.repo.UserRepo;
 import com.example.Diplomna.services.SubscriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,12 +10,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/subs")
 public class SubscriptionController {
 
     @Autowired
     private SubscriptionService subscriptionService;
+
+    @Autowired
     private UserRepo userRepo;
 
     public SubscriptionController(UserRepo userRepo) {
@@ -45,4 +50,10 @@ public class SubscriptionController {
         return subscriptionService.countSubscription(userId);
     }
 
+    @GetMapping("/subscribed-users")
+    public ResponseEntity<List<User>> getSubscribedUsers(@RequestHeader("Authorization") String authorizationHeader) {
+
+        List<User> subscribedUsers = subscriptionService.getSubscribedUsers(authorizationHeader);
+        return ResponseEntity.ok(subscribedUsers);
+    }
 }

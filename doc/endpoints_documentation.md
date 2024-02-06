@@ -65,3 +65,4 @@
 1)/count_subscriptionMyChannel - повертає кількість підписників на мій канал  ; GetMapping
 2) /add-sub - додає підписників на мій канал ; PostMapping
 3) /get-video-sub-user  - повертає колекцію відео тих каналів на які я підписана за останній місяць  ; @GetMapping
+4) /subscribed-users  - повертає юзерів, на які підписаний авторизований користувач ; @GetMapping

@@ -5,6 +5,7 @@ import com.example.Diplomna.GrabePicture.VideoWithUserInfo;
 import com.example.Diplomna.classValid.CrmHelper;
 import com.example.Diplomna.classValid.SubscriptionCrm;
 import com.example.Diplomna.enums.NotFoundException;
+import com.example.Diplomna.enums.Role;
 import com.example.Diplomna.model.Subscription;
 import com.example.Diplomna.model.User;
 import com.example.Diplomna.model.Video;
@@ -32,9 +33,14 @@ import java.util.stream.Stream;
 
 @Service
 public class SubscriptionService {
+
+    @Autowired
     private final SubscriptionRepo subscriptionRepo;
 
+    @Autowired
     private static UserRepo userRepo;
+
+    @Autowired
     private static VideoRepo videoRepo;
     private final Logger logger = LoggerFactory.getLogger(SubscriptionService.class);
     @Autowired
@@ -110,5 +116,27 @@ public class SubscriptionService {
     public long countSubscription(Long id) {
         return subscriptionRepo.countSubscribers(id);
     }
+
+
+    public List<User> getSubscribedUsers(@RequestHeader("Authorization") String authorizationHeader) {
+        CrmHelper crmHelper = new CrmHelper(userRepo);
+        Long userId = crmHelper.userId(authorizationHeader);
+        logger.info("userId: " + userId);
+
+        List<Subscription> subscriptions = subscriptionRepo.findByUser_Id(userId);
+
+        return subscriptions.stream()
+                .map(subscription -> {
+                    User user = new User(subscription.getUser_target());
+                    if (user.getRole() == null) {
+                        user.setRole(Role.USER);
+                    }
+                    return user;
+                })
+                .collect(Collectors.toList());
+    }
+
+
+
 
 }
