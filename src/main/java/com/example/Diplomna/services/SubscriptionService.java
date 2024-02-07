@@ -66,13 +66,10 @@ public class SubscriptionService {
         repr.setContentType(video.getVideoCategory().toString());
         repr.setAccessStatus(video.getAccessStatus().toString());
         repr.setUserName(user.getUserName());
+        repr.setLink_video(video.getPath());
         try {
             byte[] avatarBytes = downloadAvaUser(user.getId());
             repr.setAvatarBytes(avatarBytes);
-
-            String title = video.getTitle();
-            byte[] videoBytes = downloadVideo(title);
-            repr.setVideoBytes(videoBytes);
         } catch (IOException e) {
             // Обробити помилку завантаження аватарки
         }

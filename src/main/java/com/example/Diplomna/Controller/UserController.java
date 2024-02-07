@@ -2,7 +2,9 @@ package com.example.Diplomna.Controller;
 
 import com.example.Diplomna.classValid.AddImgUser;
 import com.example.Diplomna.classValid.CrmHelper;
+import com.example.Diplomna.model.Channel;
 import com.example.Diplomna.model.User;
+import com.example.Diplomna.repo.ChannelRepo;
 import com.example.Diplomna.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,9 +28,11 @@ public class UserController {
     private UserService userService;
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     private static UserRepo userRepo;
-
-    public UserController(UserRepo userRepo) {
+    private ChannelRepo channelRepo;
+    @Autowired
+    public UserController(UserRepo userRepo, ChannelRepo channelRepo) {
         this.userRepo = userRepo;
+        this.channelRepo = channelRepo;
     }
 
     @PostMapping(path = "/update-image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -48,6 +52,35 @@ public class UserController {
                 return imageUrl;
             } else {
                 return "User not found";
+            }
+        } else {
+            return "Unauthorized";
+        }
+    }
+
+    @PostMapping(path = "/update-banner", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public String updateBanner(@RequestHeader("Authorization") String authorizationHeader, AddImgUser user) {
+        CrmHelper crmHelper = new CrmHelper(userRepo);
+        Long userId = crmHelper.userId(authorizationHeader);
+
+        if (userId != null) {
+            Optional<Channel> channelOptional = channelRepo.findByUserId(userId);
+
+            if (channelOptional.isPresent()) {
+                Channel channel = channelOptional.get();
+                MultipartFile file = user.getPhotoUrl();
+                String imageUrl = String.valueOf(userService.addImgAva(file));
+
+                logger.info("Service File Name: " + imageUrl);
+                logger.info("UserId: " + userId);
+
+                // Оновлення шляху банера для користувача
+                channel.setBannerPath(imageUrl);
+                channelRepo.save(channel);
+
+                return imageUrl;
+            } else {
+                return "User or Channel not found";
             }
         } else {
             return "Unauthorized";
