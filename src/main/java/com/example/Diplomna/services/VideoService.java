@@ -125,6 +125,27 @@ public class VideoService {
         }
     }
 
+    @Transactional
+    public void uploadVideoLink(String authorizationHeader, NewVideoRepr newVideoRepr) {
+        CrmHelper crmHelper = new CrmHelper(userRepo);
+        Long userId = crmHelper.userId(authorizationHeader);
+        if (userId != null) {
+            // SAVE TO DB
+            Video video = new Video();
+            video.setTitle(newVideoRepr.getTitle());
+            video.setDescription(newVideoRepr.getDescription());
+            video.setUser(userId);
+            video.setAccessStatus(newVideoRepr.getAccessStatusId());
+            video.setViews(0L);
+            video.setVideoCategory(newVideoRepr.getCategoryId());
+            video.setUploadDate(LocalDateTime.now());
+            video.setTime(Time.valueOf("08:33:55"));
+            video.setPath(newVideoRepr.getLink_video());
+            videoRepo.save(video);
+        }
+    }
+
+
     public byte[] downloadVideo(String name) throws IOException {
         Video video = videoRepo.findByTitle(name).orElseThrow(() -> new NotFoundException());
 
