@@ -16,6 +16,17 @@
 	<properties>
 		<java.version>17</java.version>
 	</properties>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.google.cloud</groupId>
+				<artifactId>libraries-bom</artifactId>
+				<version>26.31.0</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -110,10 +121,15 @@
 			<version>1.5.5</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/com.google.firebase/firebase-admin -->
 		<dependency>
 			<groupId>com.google.firebase</groupId>
 			<artifactId>firebase-admin</artifactId>
-			<version>8.0.0</version> <!-- Проверьте актуальную версию на сайте Firebase -->
+			<version>8.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.cloud</groupId>
+			<artifactId>google-cloud-storage</artifactId>
 		</dependency>
 	</dependencies>
 

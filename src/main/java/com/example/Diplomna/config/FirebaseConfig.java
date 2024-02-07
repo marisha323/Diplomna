@@ -13,10 +13,11 @@ public class FirebaseConfig {
 @Bean
     public FirebaseApp firebaseApp() throws IOException{
         FileInputStream serviceAccount =
-                new FileInputStream("D:\\JAVAProject\\Diplomna2\\src\\config\\login-c47f8-firebase-adminsdk-vxhps-963ee9cc2e.json");
+                new FileInputStream("src/config/login-c47f8-firebase-adminsdk-vxhps-60abef6998.json");
 
-        FirebaseOptions options = new FirebaseOptions.Builder()
+        FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                .setStorageBucket("login-c47f8.appspot.com")
                 .build();
 
         return FirebaseApp.initializeApp(options);
