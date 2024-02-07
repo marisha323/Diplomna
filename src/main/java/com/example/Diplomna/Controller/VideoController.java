@@ -123,6 +123,20 @@ public class VideoController {
     }
 
 
+    @PostMapping(path = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Void> uploadVideoLink(@RequestHeader("Authorization") String authorizationHeader,NewVideoRepr newVideoRepr) {
+        logger.info("newVideoRepr"+newVideoRepr);
+        try {
+            videoService.uploadVideoLink(authorizationHeader,newVideoRepr);
+            logger.info("Video saved successfully");
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        } catch (Exception ex) {
+            logger.error("Error saving video", ex);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+
+    }
+
 
     @ExceptionHandler
     public ResponseEntity<Void> notFoundExceptionHandler(NotFoundException ex) {
