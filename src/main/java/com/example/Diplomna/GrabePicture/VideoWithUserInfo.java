@@ -12,15 +12,15 @@ public class VideoWithUserInfo {
     private String contentType;
     private String accessStatus;
     private String userName;
+    private String link_video;
     private byte[] avatarBytes;
-    private byte[] videoBytes;
 
-    public byte[] getVideoBytes() {
-        return videoBytes;
+    public String getLink_video() {
+        return link_video;
     }
 
-    public void setVideoBytes(byte[] videoBytes) {
-        this.videoBytes = videoBytes;
+    public void setLink_video(String link_video) {
+        this.link_video = link_video;
     }
 
     public byte[] getAvatarBytes() {
