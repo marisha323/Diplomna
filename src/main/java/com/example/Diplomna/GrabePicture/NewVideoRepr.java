@@ -7,6 +7,8 @@ public class NewVideoRepr {
 
     private String description;
     private String title;
+    private String link_video;
+
 
     private MultipartFile file;
     private Long categoryId;
@@ -15,6 +17,13 @@ public class NewVideoRepr {
 
 
     public NewVideoRepr() {
+    }
+    public String getLink_video() {
+        return link_video;
+    }
+
+    public void setLink_video(String link_video) {
+        this.link_video = link_video;
     }
 
     public Long getAccessStatusId() {

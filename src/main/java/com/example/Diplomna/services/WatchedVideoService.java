@@ -1,5 +1,6 @@
 package com.example.Diplomna.services;
 
+import com.example.Diplomna.GrabePicture.NewVideoRepr;
 import com.example.Diplomna.classValid.CrmHelper;
 import com.example.Diplomna.classValid.Like_or_Dislike_Crm;
 import com.example.Diplomna.model.Video;
@@ -50,12 +51,10 @@ public class WatchedVideoService {
     }
 
     public List<Video> getLikedVideosByUser(Long userId, Long gradeId) {
-
-       List<WatchedVideo> watchedVideos = watchedVideoRepo.findByUser_IdAndGrade_Id(userId, gradeId);
-
+        List<WatchedVideo> watchedVideos = watchedVideoRepo.findByUser_IdAndGrade_Id(userId, gradeId);
         List<Video> likedVideos = new ArrayList<>();
         for (WatchedVideo watchedVideo : watchedVideos) {
-            Long videoId = watchedVideo.getVideo(); // Отримуємо ідентифікатор відео
+            Long videoId = watchedVideo.getVideo();
             if (videoId != null) {
                 Video video = videoRepo.findById(videoId).orElse(null);
                 if (video != null) {
@@ -65,4 +64,5 @@ public class WatchedVideoService {
         }
         return likedVideos;
     }
+
 }
