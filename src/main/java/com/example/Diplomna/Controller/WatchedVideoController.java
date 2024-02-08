@@ -2,6 +2,7 @@ package com.example.Diplomna.Controller;
 
 import com.example.Diplomna.classValid.CrmHelper;
 import com.example.Diplomna.classValid.Like_or_Dislike_Crm;
+import com.example.Diplomna.model.Video;
 import com.example.Diplomna.model.WatchedVideo;
 import com.example.Diplomna.repo.UserRepo;
 import com.example.Diplomna.repo.WatchedVideoRepo;
@@ -22,7 +23,9 @@ public class WatchedVideoController {
     private WatchedVideoService watchedVideoService;
     @Autowired
     private VideoService videoService;
+    @Autowired
     private UserRepo userRepo;
+    @Autowired
     private WatchedVideoRepo watchedVideoRepo;
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
@@ -82,4 +85,10 @@ public class WatchedVideoController {
         return watchedVideoService.countwatchForVideoId(videoId);
     }
 
+    @GetMapping("/liked-videos/{gradeId}")
+    public List<Video> getLikedVideosByUser(@RequestHeader("Authorization") String authorizationHeader, @PathVariable Long gradeId) {
+        CrmHelper crmHelper = new CrmHelper(userRepo);
+        Long userId = crmHelper.userId(authorizationHeader);
+        return watchedVideoService.getLikedVideosByUser(userId, gradeId);
+    }
 }
