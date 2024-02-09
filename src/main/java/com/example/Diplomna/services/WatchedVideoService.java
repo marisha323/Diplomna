@@ -1,5 +1,6 @@
 package com.example.Diplomna.services;
 
+import com.example.Diplomna.Controller.VideoController;
 import com.example.Diplomna.GrabePicture.NewVideoRepr;
 import com.example.Diplomna.classValid.CrmHelper;
 import com.example.Diplomna.classValid.Like_or_Dislike_Crm;
@@ -8,6 +9,8 @@ import com.example.Diplomna.model.WatchedVideo;
 import com.example.Diplomna.repo.UserRepo;
 import com.example.Diplomna.repo.VideoRepo;
 import com.example.Diplomna.repo.WatchedVideoRepo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +29,8 @@ public class WatchedVideoService {
 
     @Autowired
     private VideoRepo videoRepo;
+
+    private static final Logger logger = LoggerFactory.getLogger(VideoController.class);
     public WatchedVideoService(WatchedVideoRepo watchedVideoRepo, UserRepo userRepo) {
         this.watchedVideoRepo = watchedVideoRepo;
         this.userRepo = userRepo;
@@ -55,14 +60,27 @@ public class WatchedVideoService {
         List<Video> likedVideos = new ArrayList<>();
         for (WatchedVideo watchedVideo : watchedVideos) {
             Long videoId = watchedVideo.getVideo();
+            logger.info("videoId "+ videoId);
             if (videoId != null) {
-                Video video = videoRepo.findById(videoId).orElse(null);
+                Video video = videoRepo.findByIdWithDetails(videoId);
                 if (video != null) {
-                    likedVideos.add(video);
+
+                    String title = video.getTitle();
+                    String description = video.getDescription();
+                    String path = video.getPath();
+
+                    Video videoWithDetails = new Video();
+                    videoWithDetails.setTitle(title);
+                    videoWithDetails.setDescription(description);
+                    videoWithDetails.setPath(path);
+
+                    likedVideos.add(videoWithDetails);
                 }
             }
         }
         return likedVideos;
     }
+
+
 
 }
