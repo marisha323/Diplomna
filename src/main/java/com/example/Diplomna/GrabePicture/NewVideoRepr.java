@@ -8,8 +8,6 @@ public class NewVideoRepr {
     private String description;
     private String title;
     private String link_video;
-
-
     private MultipartFile file;
     private Long categoryId;
     private Long accessStatusId;

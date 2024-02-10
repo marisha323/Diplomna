@@ -1,5 +1,7 @@
 package com.example.Diplomna.repo;
 
+import com.example.Diplomna.model.User;
+import com.example.Diplomna.model.Video;
 import com.example.Diplomna.model.WatchedVideo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -18,4 +20,15 @@ public interface WatchedVideoRepo extends JpaRepository<WatchedVideo,Long> {
 
     @Query("SELECT COUNT(wv.watchCount) FROM WatchedVideo wv WHERE wv.video.id = :videoId ")
     long countwatchForVideoId(@Param("videoId") Long videoId);
+
+    @Query("SELECT wv.video.id FROM WatchedVideo wv WHERE wv.user.id = :userId AND wv.grade.id = :gradeId")
+    List<Long> findVideoIdsByUserIdAndGradeId(@Param("userId") Long userId, @Param("gradeId") Long gradeId);
+
+
+
+
+
+
+
+
 }
