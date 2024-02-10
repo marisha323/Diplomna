@@ -5,6 +5,7 @@ import com.example.Diplomna.GrabePicture.NewVideoRepr;
 import com.example.Diplomna.classValid.CrmHelper;
 import com.example.Diplomna.classValid.Like_or_Dislike_Crm;
 import com.example.Diplomna.classValid.VideoDTO;
+import com.example.Diplomna.enums.NotFoundException;
 import com.example.Diplomna.model.User;
 import com.example.Diplomna.model.Video;
 import com.example.Diplomna.model.WatchedVideo;
@@ -16,6 +17,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -28,7 +32,7 @@ public class WatchedVideoService {
     private final WatchedVideoRepo watchedVideoRepo;
 
     @Autowired
-    private UserRepo userRepo;
+    private static UserRepo userRepo;
 
     @Autowired
     private VideoRepo videoRepo;
@@ -72,7 +76,14 @@ public class WatchedVideoService {
                     if (user != null) {
                         String userName = user.getUserName();
                         String photoUrl = user.getPhotoUrl();
-                        return new VideoDTO(video, userName, photoUrl);
+                        String title = video.getTitle();
+                        byte[] avatarBytes = new byte[0];
+                        try {
+                            avatarBytes = downloadAvaUser(user.getId());
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                        return new VideoDTO(video, userName, photoUrl,avatarBytes);
                     }
                     return null;
                 })
@@ -82,7 +93,10 @@ public class WatchedVideoService {
         return videoDTOs;
     }
 
-
+    public static byte[] downloadAvaUser(Long id) throws IOException {
+        User user = userRepo.findById(id).orElseThrow(() -> new NotFoundException());
+        return Files.readAllBytes(new File(user.getPhotoUrl()).toPath());
+    }
 
 
     private Long getUserIdFromAuthorizationHeader(String authorizationHeader) {

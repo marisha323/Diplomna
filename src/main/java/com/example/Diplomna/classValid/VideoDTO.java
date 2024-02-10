@@ -9,16 +9,26 @@ public class VideoDTO {
     private String path;
     private String userName;
     private String photoUrl;
+    private byte[] photoBete;
 
+    public VideoDTO(Video video, String userName, String photoUrl, byte[] photoBete) {
 
-    public VideoDTO(Video video, String userName, String photoUrl) {
         this.id = video.getId();
         this.title = video.getTitle();
         this.description = video.getDescription();
         this.path = video.getPath();
         this.userName = userName;
         this.photoUrl = photoUrl;
+        this.photoBete = photoBete;
     }
+//    public VideoDTO(Video video, String userName, String photoUrl) {
+//        this.id = video.getId();
+//        this.title = video.getTitle();
+//        this.description = video.getDescription();
+//        this.path = video.getPath();
+//        this.userName = userName;
+//        this.photoUrl = photoUrl;
+//    }
 
     // Геттери і сеттери
     public Long getId() {
