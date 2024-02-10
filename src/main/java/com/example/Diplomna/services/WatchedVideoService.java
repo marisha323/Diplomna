@@ -79,7 +79,7 @@ public class WatchedVideoService {
                         String title = video.getTitle();
                         byte[] avatarBytes = new byte[0];
                         try {
-                            avatarBytes = downloadAvaUser(user.getId());
+                            avatarBytes = downloadAvaUser(userId2);
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }

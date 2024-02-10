@@ -9,6 +9,15 @@ public class VideoDTO {
     private String path;
     private String userName;
     private String photoUrl;
+
+    public byte[] getPhotoBete() {
+        return photoBete;
+    }
+
+    public void setPhotoBete(byte[] photoBete) {
+        this.photoBete = photoBete;
+    }
+
     private byte[] photoBete;
 
     public VideoDTO(Video video, String userName, String photoUrl, byte[] photoBete) {
@@ -19,7 +28,7 @@ public class VideoDTO {
         this.path = video.getPath();
         this.userName = userName;
         this.photoUrl = photoUrl;
-        this.photoBete = photoBete;
+        this.photoBete=photoBete;
     }
 //    public VideoDTO(Video video, String userName, String photoUrl) {
 //        this.id = video.getId();
