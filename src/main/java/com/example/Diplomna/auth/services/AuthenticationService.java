@@ -8,7 +8,9 @@ import com.example.Diplomna.auth.response.RegisterResponse;
 import com.example.Diplomna.config.JwtService;
 import com.example.Diplomna.dto.UserDto;
 import com.example.Diplomna.enums.Role;
+import com.example.Diplomna.model.Channel;
 import com.example.Diplomna.model.User;
+import com.example.Diplomna.repo.ChannelRepo;
 import com.example.Diplomna.repo.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,6 +25,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthenticationService {
     private final UserRepo userRepo;
+    private final ChannelRepo channelRepo;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
@@ -42,7 +45,13 @@ public class AuthenticationService {
                 .build();
         userRepo.save(user);
 
+        Channel channel = new Channel();
+        channel.setUser(user.getId());
+        channel.setBannerPath("bannerPath");
+        channelRepo.save(channel);
+
         return createRegisterResponse(user);
+
     }
 
     private RegisterResponse createRegisterResponse(User user) throws Exception {
