@@ -1,6 +1,8 @@
 package com.example.Diplomna.GrabePicture;
 
 
+import com.example.Diplomna.model.AccessStatus;
+
 //клас викор. для передачі інфи на фронт
 public class VideoMetadataRepr {
     private Long id;
@@ -10,6 +12,68 @@ public class VideoMetadataRepr {
 
     private String contentType;
     private String path;
+    private Long userId;
+    private String username;
+    private byte[] avatarBytes;
+    private String accessStatus;
+    private String avatarPath;
+
+    public byte[] getAvatarBytes() {
+        return avatarBytes;
+    }
+
+    public void setAvatarBytes(byte[] avatarBytes) {
+        this.avatarBytes = avatarBytes;
+    }
+
+    public String getPathAVA() {
+        return pathAVA;
+    }
+
+    public void setPathAVA(String pathAVA) {
+        this.pathAVA = pathAVA;
+    }
+
+    private String pathAVA;
+
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+
+    public String getAccessStatus() {
+        return accessStatus;
+    }
+
+    public void setAccessStatus(String accessStatus) {
+        this.accessStatus = accessStatus;
+    }
+
+
+
+    public String getAvatarPath() {
+        return avatarPath;
+    }
+
+    public void setAvatarPath(String avatarPath) {
+        this.avatarPath = avatarPath;
+    }
+
+
 
     public VideoMetadataRepr() {
     }

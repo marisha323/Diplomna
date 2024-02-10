@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 
 @Entity
+
 public class PlayListVideo implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,20 +39,47 @@ public class PlayListVideo implements Serializable {
         this.id = id;
     }
 
-    public PlayList getPlayList() {
-        return playList;
+//    public PlayList getPlayList() {
+//        return playList;
+//    }
+//
+//    public void setPlayList(PlayList playList) {
+//        this.playList = playList;
+//    }
+
+    public Long getPlayList() {
+        return playList != null ? playList.getId() : null;
     }
 
-    public void setPlayList(PlayList playList) {
-        this.playList = playList;
+    public void setPlayList(Long playListId) {
+        if (playListId != null) {
+            PlayList playList = new PlayList();
+            playList.setId(playListId);
+            this.playList = playList;
+        } else {
+            this.playList = null;
+        }
     }
 
-    public Video getVideo() {
-        return video;
+//    public Video getVideo() {
+//        return video;
+//    }
+//
+//    public void setVideo(Video video) {
+//        this.video = video;
+//    }
+    public Long getVideo() {
+        return video != null ? video.getId() : null;
     }
 
-    public void setVideo(Video video) {
-        this.video = video;
+    public void setVideo(Long videoId) {
+        if (videoId != null) {
+            Video video = new Video();
+            video.setId(videoId);
+            this.video = video;
+        } else {
+            this.video = null;
+        }
     }
 
     public PlayListVideo(Long id, PlayList playList, Video video) {

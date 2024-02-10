@@ -1,30 +1,44 @@
 package com.example.Diplomna.services;
 
 
+import com.example.Diplomna.GrabePicture.UserWithVideosResponse;
+import com.example.Diplomna.classValid.CrmHelper;
 import com.example.Diplomna.model.User;
+import com.example.Diplomna.model.Video;
 import com.example.Diplomna.repo.UserRepo;
 
+import com.example.Diplomna.repo.VideoRepo;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
-    private final UserRepo userRepository;
+    private static UserRepo userRepo;
+    private VideoRepo videoRepo;
     private final Logger logger = LoggerFactory.getLogger(UserService.class);
+    @Autowired
+    public UserService(UserRepo userRepo, VideoRepo videoRepo) {
+        this.userRepo = userRepo;
+        this.videoRepo = videoRepo;
+    }
+
     public Optional<User> findByEmail(String email) {
-        return userRepository.findByEmail(email);
+        return userRepo.findByEmail(email);
     }
     public String addImgAva(MultipartFile file){
         try {
@@ -44,5 +58,8 @@ public class UserService {
         }
     }
 
+    public Optional<User> findUserById(Long userId) {
+        return userRepo.findById(userId);
+    }
 
 }

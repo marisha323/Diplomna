@@ -2,6 +2,7 @@ package com.example.Diplomna.model;
 
 import com.example.Diplomna.classValid.AddImgUser;
 import com.example.Diplomna.enums.Role;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +19,7 @@ import java.util.List;
 @Entity
 @Data
 @Builder
-@NoArgsConstructor
+
 @AllArgsConstructor
 public class User implements UserDetails {
     @Id
@@ -35,12 +36,23 @@ public class User implements UserDetails {
     private String photoUrl;
     private boolean isActivated;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @Enumerated (EnumType.STRING)
+    private Role role;
+
+    public User(Long userId) {
+        this.id = userId;
+
+    }
+
+    public User() {
+        this.role = Role.USER;
+    }
     public Long getId() {
         return id;
     }
 
-    @Enumerated (EnumType.STRING)
-    private Role role;
+
 
     public String getUserName() {return userName;}
     @Override
@@ -77,5 +89,17 @@ public class User implements UserDetails {
         return true;
     }
 
-
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", userName='" + userName + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", externalId='" + externalId + '\'' +
+                ", photoUrl='" + photoUrl + '\'' +
+                ", isActivated=" + isActivated +
+                ", role=" + role +
+                '}';
+    }
 }

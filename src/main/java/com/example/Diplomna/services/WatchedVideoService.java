@@ -33,4 +33,8 @@ public class WatchedVideoService {
     public long countGradeDislikeForVideoId(Long videoId) {
         return watchedVideoRepo.countGradeDislikeForVideoId(videoId);
     }
+
+    public long countwatchForVideoId(Long videoId) {
+        return watchedVideoRepo.countwatchForVideoId(videoId);
+    }
 }
