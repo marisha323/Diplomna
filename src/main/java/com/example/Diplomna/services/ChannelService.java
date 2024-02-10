@@ -49,6 +49,8 @@ public class ChannelService {
         repr.setBannerUrl(banner.getBannerPath());
 
         try {
+            byte[] bannerByte=  Files.readAllBytes(new File(banner.getBannerPath()).toPath());;
+            repr.setBannerByte(bannerByte);
             byte[] avatarBytes = downloadAvaUser(user.getId());
             repr.setAvatarBytes(avatarBytes);
         } catch (IOException e) {

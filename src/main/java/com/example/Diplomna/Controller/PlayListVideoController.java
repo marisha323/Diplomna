@@ -5,10 +5,7 @@ import com.example.Diplomna.services.PlayListVideoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/list_video")
@@ -27,5 +24,10 @@ public class PlayListVideoController {
         catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("В плейлист не додалося відео");
         }
+    }
+    @GetMapping("/all-video-playlist")
+    public ResponseEntity<?> allVideoPlayList(){
+
+        return ResponseEntity.ok("В плейлист успішно додалося відео");
     }
 }

@@ -4,7 +4,18 @@ public class ChannelResponseConvert {
     private String userName;
     private String photoUrl;
     private String bannerUrl;
+
     private byte[] avatarBytes;
+
+    private byte[] bannerByte;
+
+    public byte[] getBannerByte() {
+        return bannerByte;
+    }
+
+    public void setBannerByte(byte[] bannerByte) {
+        this.bannerByte = bannerByte;
+    }
 
     public byte[] getAvatarBytes() {
         return avatarBytes;
