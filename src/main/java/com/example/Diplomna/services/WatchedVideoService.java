@@ -4,6 +4,8 @@ import com.example.Diplomna.Controller.VideoController;
 import com.example.Diplomna.GrabePicture.NewVideoRepr;
 import com.example.Diplomna.classValid.CrmHelper;
 import com.example.Diplomna.classValid.Like_or_Dislike_Crm;
+import com.example.Diplomna.classValid.VideoDTO;
+import com.example.Diplomna.model.User;
 import com.example.Diplomna.model.Video;
 import com.example.Diplomna.model.WatchedVideo;
 import com.example.Diplomna.repo.UserRepo;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,9 +34,10 @@ public class WatchedVideoService {
     private VideoRepo videoRepo;
 
     private static final Logger logger = LoggerFactory.getLogger(VideoController.class);
-    public WatchedVideoService(WatchedVideoRepo watchedVideoRepo, UserRepo userRepo) {
+    public WatchedVideoService(WatchedVideoRepo watchedVideoRepo, UserRepo userRepo,VideoRepo videoRepo) {
         this.watchedVideoRepo = watchedVideoRepo;
         this.userRepo = userRepo;
+        this.videoRepo=videoRepo;
     }
 
     public String like(String authorizationHeader, Like_or_Dislike_Crm likeOrDislikeCrm){
@@ -55,32 +59,36 @@ public class WatchedVideoService {
         return watchedVideoRepo.countwatchForVideoId(videoId);
     }
 
-    public List<Video> getLikedVideosByUser(Long userId, Long gradeId) {
-        List<WatchedVideo> watchedVideos = watchedVideoRepo.findByUser_IdAndGrade_Id(userId, gradeId);
-        List<Video> likedVideos = new ArrayList<>();
-        for (WatchedVideo watchedVideo : watchedVideos) {
-            Long videoId = watchedVideo.getVideo();
-            logger.info("videoId "+ videoId);
-            if (videoId != null) {
-                Video video = videoRepo.findByIdWithDetails(videoId);
-                if (video != null) {
+    public List<VideoDTO> getLikedVideosByUser2(String authorizationHeader, Long gradeId) {
+        Long userId = getUserIdFromAuthorizationHeader(authorizationHeader);
+        List<Long> videoIds = watchedVideoRepo.findVideoIdsByUserIdAndGradeId(userId, gradeId);
 
-                    String title = video.getTitle();
-                    String description = video.getDescription();
-                    String path = video.getPath();
+        List<Video> likedVideos = videoRepo.findAllById(videoIds);
 
-                    Video videoWithDetails = new Video();
-                    videoWithDetails.setTitle(title);
-                    videoWithDetails.setDescription(description);
-                    videoWithDetails.setPath(path);
+        List<VideoDTO> videoDTOs = likedVideos.stream()
+                .map(video -> {
+                    Long userId2 = video.getUser();
+                    User user = userRepo.findById(userId2).orElse(null);
+                    if (user != null) {
+                        String userName = user.getUserName();
+                        String photoUrl = user.getPhotoUrl();
+                        return new VideoDTO(video, userName, photoUrl);
+                    }
+                    return null;
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
 
-                    likedVideos.add(videoWithDetails);
-                }
-            }
-        }
-        return likedVideos;
+        return videoDTOs;
     }
 
 
 
+
+    private Long getUserIdFromAuthorizationHeader(String authorizationHeader) {
+        CrmHelper crmHelper = new CrmHelper(userRepo);
+        return crmHelper.userId(authorizationHeader);
+    }
 }
+
+

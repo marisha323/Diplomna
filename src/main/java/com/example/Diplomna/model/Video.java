@@ -1,6 +1,8 @@
 package com.example.Diplomna.model;
 
+import com.example.Diplomna.repo.UserRepo;
 import jakarta.persistence.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
 import java.sql.Time;
@@ -9,6 +11,8 @@ import java.util.List;
 
 @Entity
 public class Video implements Serializable {
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false,updatable = false)
@@ -36,7 +40,6 @@ public class Video implements Serializable {
 
     private LocalDateTime uploadDate;
     private Time time;
-
 
     public Long getId() {
         return id;
@@ -77,6 +80,7 @@ static List<Video> findByTitleContaining(String title){return null;}
         return ownerId != null ? ownerId.getId() : null;
     }
 
+
     public void setUser(Long userId) {
         if (userId != null) {
             User user = new User();
@@ -87,16 +91,7 @@ static List<Video> findByTitleContaining(String title){return null;}
         }
     }
 
-
-//    public User getUser() {
-//        return ownerId;
-//    }
-//
-//    public void setUser(User user) {
-//        this.ownerId = user;
-//    }
-
-    public Long getAccessStatus() {
+   public Long getAccessStatus() {
         return accessStatus != null ? accessStatus.getId() : null;
     }
 
