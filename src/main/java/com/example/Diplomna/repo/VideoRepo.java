@@ -33,4 +33,8 @@ public interface VideoRepo extends JpaRepository<Video,Long> {
     @Query("SELECT COUNT(v.id) FROM Video v WHERE v.ownerId.id = :userId")
     long countVideoId(@Param("userId") Long userId);
 
+
+    @Query("SELECT v.title,v.description,v.path FROM Video v WHERE v.id = :videoId")
+    Video findByIdWithDetails(@Param("videoId") Long videoId);
+
 }
