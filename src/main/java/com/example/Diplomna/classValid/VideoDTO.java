@@ -9,6 +9,7 @@ public class VideoDTO {
     private String path;
     private String userName;
     private String photoUrl;
+    private byte[] photoBete;
 
     public byte[] getPhotoBete() {
         return photoBete;
@@ -18,7 +19,6 @@ public class VideoDTO {
         this.photoBete = photoBete;
     }
 
-    private byte[] photoBete;
 
     public VideoDTO(Video video, String userName, String photoUrl, byte[] photoBete) {
 

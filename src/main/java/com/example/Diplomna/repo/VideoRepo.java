@@ -1,5 +1,6 @@
 package com.example.Diplomna.repo;
 
+import com.example.Diplomna.model.PlayListVideo;
 import com.example.Diplomna.model.Video;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -36,5 +37,6 @@ public interface VideoRepo extends JpaRepository<Video,Long> {
 
     @Query("SELECT v.title,v.description,v.path FROM Video v WHERE v.id = :videoId")
     Video findByIdWithDetails(@Param("videoId") Long videoId);
+
 
 }

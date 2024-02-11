@@ -1,24 +1,39 @@
 package com.example.Diplomna.services;
 
 import com.example.Diplomna.classValid.PlayListVideoCrm;
+import com.example.Diplomna.classValid.VideoDTO;
+import com.example.Diplomna.enums.NotFoundException;
 import com.example.Diplomna.model.PlayListVideo;
-import com.example.Diplomna.repo.PlayListRepo;
+import com.example.Diplomna.model.User;
+import com.example.Diplomna.model.Video;
 import com.example.Diplomna.repo.PlayListVideoRepo;
+import com.example.Diplomna.repo.UserRepo;
+import com.example.Diplomna.repo.VideoRepo;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PlayListVideoService {
 
-    private final PlayListVideoRepo playListVideoRepo;
+
+    @Autowired
+    private PlayListVideoRepo playListVideoRepo;
+    @Autowired
+    private VideoRepo videoRepo;
+    @Autowired
+    private static UserRepo userRepo;
     private final Logger logger = LoggerFactory.getLogger(PlayListService.class);
 
     @Autowired
@@ -59,5 +74,42 @@ public class PlayListVideoService {
         } else {
             throw new IllegalArgumentException("Невірні параметри для додавання відео в плейлист");
         }
+    }
+
+    public static byte[] downloadAvaUser(Long id) throws IOException {
+        User user = userRepo.findById(id).orElseThrow(() -> new NotFoundException());
+
+        return Files.readAllBytes(new File(user.getPhotoUrl()).toPath());
+    }
+
+    public List<VideoDTO> getVideosFromPlaylist(Long playlistId) {
+        Optional<PlayListVideo> playlistOptional = playListVideoRepo.findById(playlistId);
+        List<VideoDTO> videoDTOList = new ArrayList<>();
+
+        if (playlistOptional.isPresent()) {
+            PlayListVideo playlist = playlistOptional.get();
+            List<Long> videoIds = Collections.singletonList(playlist.getVideo());
+
+            for (Long videoId : videoIds) {
+                Optional<Video> videoOptional = videoRepo.findById(videoId);
+                if (videoOptional.isPresent()) {
+                    Video video = videoOptional.get();
+                    Optional<User> userOptional = userRepo.findById(video.getUser());
+                    if (userOptional.isPresent()) {
+                        User user = userOptional.get();
+                        byte[] avatarBytes = new byte[0];
+                        try {
+                            avatarBytes = downloadAvaUser(user.getId());
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                        VideoDTO videoDTO = new VideoDTO(video, user.getUserName(), user.getPhotoUrl(), avatarBytes);
+                        videoDTOList.add(videoDTO);
+                    }
+                }
+            }
+        }
+
+        return videoDTOList;
     }
 }
