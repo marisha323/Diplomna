@@ -18,6 +18,7 @@ public class VideoDto {
     private String title;
     private String description;
     private String uri;
+    private Long views;
     private AccessStatusDto accessStatus;
     private VideoCategoryDto videoCategory;
     private LocalDateTime uploadDate;
