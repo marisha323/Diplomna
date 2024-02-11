@@ -86,46 +86,46 @@ public class VideoService {
 
 
     }
-    public List<VideoDto> findAll(int accessStatus) {
-        List<Video> videos = videoRepo.findAll().stream()
-                .filter(video -> video.getAccessStatus() == accessStatus)
-                .toList();
-        List<VideoDto> response = new ArrayList<>();
-
-        for (Video video : videos) {
-            Optional<User> user = userRepo.findById(video.getUser());
-            Optional<VideoCategory> category = videoCategoryRepo.findById(video.getVideoCategory());
-            Optional<AccessStatus> status = accessStatusRepo.findById((long) accessStatus);
-
-            response.add(VideoDto.builder()
-                            .id(video.getId())
-                            .title(video.getTitle())
-                            .uri(video.getPath())
-                            .description(video.getDescription())
-                            .videoCategory(VideoCategoryDto.builder()
-                                    .id(category.get().getId())
-                                    .title(category.get().getTitle())
-                                    .build())
-                            .accessStatus(AccessStatusDto.builder()
-                                    .id(status.get().getId())
-                                    .status(status.get().getStatus())
-                                    .build())
-                            .user(UserDto.builder()
-                                    .id(user.get().getId())
-                                    .email(user.get().getEmail())
-                                    .displayName(user.get().getUsername())
-                                    .photoUrl(user.get().getPhotoUrl())
-                                    .build())
-                    .build());
-        }
-        /*return videoRepo.findAll().stream()
+    public List<VideoMetadataRepr> findAll(int accessStatus) {
+//        List<Video> videos = videoRepo.findAll().stream()
+//                .filter(video -> video.getAccessStatus() == accessStatus)
+//                .toList();
+//        List<VideoDto> response = new ArrayList<>();
+//
+//        for (Video video : videos) {
+//            Optional<User> user = userRepo.findById(video.getUser());
+//            Optional<VideoCategory> category = videoCategoryRepo.findById(video.getVideoCategory());
+//            Optional<AccessStatus> status = accessStatusRepo.findById((long) accessStatus);
+//
+//            response.add(VideoDto.builder()
+//                            .id(video.getId())
+//                            .title(video.getTitle())
+//                            .uri(video.getPath())
+//                            .description(video.getDescription())
+//                            .videoCategory(VideoCategoryDto.builder()
+//                                    .id(category.get().getId())
+//                                    .title(category.get().getTitle())
+//                                    .build())
+//                            .accessStatus(AccessStatusDto.builder()
+//                                    .id(status.get().getId())
+//                                    .status(status.get().getStatus())
+//                                    .build())
+//                            .user(UserDto.builder()
+//                                    .id(user.get().getId())
+//                                    .email(user.get().getEmail())
+//                                    .displayName(user.get().getUsername())
+//                                    .photoUrl(user.get().getPhotoUrl())
+//                                    .build())
+//                    .build());
+//        }
+//        return response;
+           return videoRepo.findAll().stream()
                 .filter(video -> video.getAccessStatus() == accessStatus)
                 .flatMap(video -> userService.findUserById(video.getUser())
                         .map(user -> Stream.of(convert(video, user)))
                         .orElseGet(Stream::empty))
-                .collect(Collectors.toList());*/
+                .collect(Collectors.toList());
 
-        return response;
     }
     public Optional<VideoMetadataRepr> findById(Long id) {
         return videoRepo.findById(id)
