@@ -20,8 +20,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -55,8 +57,6 @@ public class VideoController {
     @GetMapping("/all")
     public List<VideoMetadataRepr> findAll()
     {
-        System.out.println("Request");
-        //return ResponseEntity.ok(videoService.findAll(1));
         return videoService.findAll(1);
     }
     @GetMapping("/{id}")
@@ -86,7 +86,7 @@ public class VideoController {
         }
     }
 
-    @PostMapping(path = "/uploadNew")
+    @PostMapping(path = "/uploadNew", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> uploadVideo(@RequestHeader("Authorization") String authorizationHeader,NewVideoRepr newVideoRepr) {
         logger.info("newVideoRepr"+newVideoRepr);
         try {
@@ -123,10 +123,9 @@ public class VideoController {
     }
 
 
-    @PostMapping(path = "/upload")
+    @PostMapping(path = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> uploadVideoLink(@RequestHeader("Authorization") String authorizationHeader,NewVideoRepr newVideoRepr) {
         logger.info("newVideoRepr"+newVideoRepr);
-        System.out.println(newVideoRepr.getLink_video());
         try {
             videoService.uploadVideoLink(authorizationHeader,newVideoRepr);
             logger.info("Video saved successfully");
