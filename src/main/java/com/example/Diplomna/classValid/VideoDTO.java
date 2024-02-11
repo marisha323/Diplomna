@@ -30,16 +30,7 @@ public class VideoDTO {
         this.photoUrl = photoUrl;
         this.photoBete=photoBete;
     }
-//    public VideoDTO(Video video, String userName, String photoUrl) {
-//        this.id = video.getId();
-//        this.title = video.getTitle();
-//        this.description = video.getDescription();
-//        this.path = video.getPath();
-//        this.userName = userName;
-//        this.photoUrl = photoUrl;
-//    }
 
-    // Геттери і сеттери
     public Long getId() {
         return id;
     }

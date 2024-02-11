@@ -29,8 +29,8 @@ public class ChannelController {
     }
 
     @PostMapping("/createChannel")
-    public ResponseEntity<Channel> createChannel(@RequestHeader("Authorization") String authorizationHeader, @RequestParam(required = false) String bannerPath) {
-        Channel createdChannel = channelService.createChannel(authorizationHeader, bannerPath);
+    public ResponseEntity<Channel> createChannel(@RequestHeader("Authorization") String authorizationHeader) {
+        Channel createdChannel = channelService.createChannel(authorizationHeader);
         return new ResponseEntity<>(createdChannel, HttpStatus.CREATED);
     }
 }
