@@ -5,6 +5,7 @@ import com.example.Diplomna.GrabePicture.NewVideoRepr;
 import com.example.Diplomna.GrabePicture.VideoMetadataRepr;
 import com.example.Diplomna.classValid.CrmHelper;
 import com.example.Diplomna.model.History;
+import com.example.Diplomna.model.Video;
 import com.example.Diplomna.model.WatchedVideo;
 import com.example.Diplomna.repo.HistoryRepo;
 import com.example.Diplomna.repo.UserRepo;
@@ -45,9 +46,9 @@ public class VideoController {
     private static final Logger logger = LoggerFactory.getLogger(VideoController.class);
     @Value("${data.folder")
     private String dataFolder;
-    public VideoController(VideoRepo videoRepo, WatchedVideoRepo watchedVideoRepo, HistoryRepo historyRepo, UserRepo userRepo)
-    {
-        this.videoRepo=videoRepo;
+
+    public VideoController(VideoRepo videoRepo, WatchedVideoRepo watchedVideoRepo, HistoryRepo historyRepo, UserRepo userRepo) {
+        this.videoRepo = videoRepo;
 
         this.watchedVideoRepo = watchedVideoRepo;
         this.historyRepo = historyRepo;
@@ -55,15 +56,15 @@ public class VideoController {
     }
 
     @GetMapping("/all")
-    public List<VideoMetadataRepr> findAll()
-    {
+    public List<VideoMetadataRepr> findAll() {
         return videoService.findAll(1);
     }
+
     @GetMapping("/{id}")
-    public ResponseEntity<?> findVideoMetadataById(@RequestHeader("Authorization")String authorizationHeader, @PathVariable("id") Long videoId) {
+    public ResponseEntity<?> findVideoMetadataById(@RequestHeader("Authorization") String authorizationHeader, @PathVariable("id") Long videoId) {
         CrmHelper crmHelper = new CrmHelper(userRepo);
         Long userId = crmHelper.userId(authorizationHeader);
-        if (videoId != null && userId !=null) {
+        if (videoId != null && userId != null) {
             WatchedVideo watchedVideo = new WatchedVideo();
             watchedVideo.setWatchCount(1);
             watchedVideo.setWatchDate(LocalDateTime.now());
@@ -87,10 +88,10 @@ public class VideoController {
     }
 
     @PostMapping(path = "/uploadNew", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Void> uploadVideo(@RequestHeader("Authorization") String authorizationHeader,NewVideoRepr newVideoRepr) {
-        logger.info("newVideoRepr"+newVideoRepr);
+    public ResponseEntity<Void> uploadVideo(@RequestHeader("Authorization") String authorizationHeader, NewVideoRepr newVideoRepr) {
+        logger.info("newVideoRepr" + newVideoRepr);
         try {
-            videoService.uploadVideo(authorizationHeader,newVideoRepr);
+            videoService.uploadVideo(authorizationHeader, newVideoRepr);
             logger.info("Video saved successfully");
         } catch (Exception ex) {
             logger.error("Error saving video", ex);
@@ -100,7 +101,7 @@ public class VideoController {
     }
 
     @GetMapping("/byteVideo")
-    public ResponseEntity<?> downloadVideoByName(String name)  {
+    public ResponseEntity<?> downloadVideoByName(String name) {
         try {
             byte[] videoBytes = videoService.downloadVideo(name);
 
@@ -124,10 +125,10 @@ public class VideoController {
 
 
     @PostMapping(path = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Void> uploadVideoLink(@RequestHeader("Authorization") String authorizationHeader,NewVideoRepr newVideoRepr) {
-        logger.info("newVideoRepr"+newVideoRepr);
+    public ResponseEntity<Void> uploadVideoLink(@RequestHeader("Authorization") String authorizationHeader, NewVideoRepr newVideoRepr) {
+        logger.info("newVideoRepr" + newVideoRepr);
         try {
-            videoService.uploadVideoLink(authorizationHeader,newVideoRepr);
+            videoService.uploadVideoLink(authorizationHeader, newVideoRepr);
             logger.info("Video saved successfully");
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (Exception ex) {
@@ -135,6 +136,8 @@ public class VideoController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+
 
 
     @ExceptionHandler

@@ -37,6 +37,4 @@ public interface VideoRepo extends JpaRepository<Video,Long> {
 
     @Query("SELECT v.title,v.description,v.path FROM Video v WHERE v.id = :videoId")
     Video findByIdWithDetails(@Param("videoId") Long videoId);
-
-
 }

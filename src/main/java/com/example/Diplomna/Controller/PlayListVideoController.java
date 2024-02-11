@@ -54,19 +54,6 @@ public class PlayListVideoController {
     }
 
     @GetMapping("/all-video-playlist")
-    public ResponseEntity<?> allVideoPlayList(Long playListId) {
-        List<PlayListVideo> playListVideos = playListVideoRepo.findAllByPlayListId(playListId);
-        List<Video> videos = new ArrayList<>();
-
-        for (PlayListVideo playListVideo : playListVideos) {
-            Optional<Video> videoOptional = videoRepo.findById(playListVideo.getVideo());
-            videoOptional.ifPresent(videos::add);
-        }
-
-        return ResponseEntity.ok(videos);
-    }
-
-    @GetMapping("/all-video-playlist-info")
     public ResponseEntity<?> allVideoPlayList2(Long playListId) {
         List<PlayListVideo> playListVideos = playListVideoRepo.findAllByPlayListId(playListId);
         List<VideoDTO> videoDTOList = new ArrayList<>();
@@ -105,7 +92,4 @@ public class PlayListVideoController {
 
         return Files.readAllBytes(new File(user.getPhotoUrl()).toPath());
     }
-
-
-
 }
