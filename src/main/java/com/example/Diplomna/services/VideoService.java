@@ -87,7 +87,9 @@ public class VideoService {
 
     }
     public List<VideoDto> findAll(int accessStatus) {
-        List<Video> videos = videoRepo.findAll();
+        List<Video> videos = videoRepo.findAll().stream()
+                .filter(video -> video.getAccessStatus() == accessStatus)
+                .toList();
         List<VideoDto> response = new ArrayList<>();
 
         for (Video video : videos) {
