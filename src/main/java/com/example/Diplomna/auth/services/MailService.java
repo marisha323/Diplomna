@@ -40,6 +40,7 @@ public class MailService {
 
             return linkBuilder.toString();
         } catch (Exception ex) {
+            System.out.println("Mail Error:" + ex.getMessage());
             activationLinkService.deleteLinkById(link.getId());
             userRepo.deleteById(user.getId());
             throw new Exception(ex.getMessage());

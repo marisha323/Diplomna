@@ -4,6 +4,7 @@ package com.example.Diplomna.Controller;
 import com.example.Diplomna.GrabePicture.NewVideoRepr;
 import com.example.Diplomna.GrabePicture.VideoMetadataRepr;
 import com.example.Diplomna.classValid.CrmHelper;
+import com.example.Diplomna.dto.VideoDto;
 import com.example.Diplomna.model.History;
 import com.example.Diplomna.model.WatchedVideo;
 import com.example.Diplomna.repo.HistoryRepo;
@@ -55,9 +56,11 @@ public class VideoController {
     }
 
     @GetMapping("/all")
-    public List<VideoMetadataRepr> findAll()
+    public ResponseEntity<List<VideoDto>> findAll()
     {
-        return videoService.findAll(1);
+        System.out.println("Request");
+        return ResponseEntity.ok(videoService.findAll(1));
+//        return videoService.findAll(1);
     }
     @GetMapping("/{id}")
     public ResponseEntity<?> findVideoMetadataById(@RequestHeader("Authorization")String authorizationHeader, @PathVariable("id") Long videoId) {
@@ -86,7 +89,7 @@ public class VideoController {
         }
     }
 
-    @PostMapping(path = "/uploadNew", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(path = "/uploadNew")
     public ResponseEntity<Void> uploadVideo(@RequestHeader("Authorization") String authorizationHeader,NewVideoRepr newVideoRepr) {
         logger.info("newVideoRepr"+newVideoRepr);
         try {
@@ -123,9 +126,10 @@ public class VideoController {
     }
 
 
-    @PostMapping(path = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(path = "/upload")
     public ResponseEntity<Void> uploadVideoLink(@RequestHeader("Authorization") String authorizationHeader,NewVideoRepr newVideoRepr) {
         logger.info("newVideoRepr"+newVideoRepr);
+        System.out.println(newVideoRepr.getLink_video());
         try {
             videoService.uploadVideoLink(authorizationHeader,newVideoRepr);
             logger.info("Video saved successfully");

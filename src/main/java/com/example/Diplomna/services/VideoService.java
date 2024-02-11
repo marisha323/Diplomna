@@ -3,11 +3,19 @@ package com.example.Diplomna.services;
 
 import com.example.Diplomna.GrabePicture.NewVideoRepr;
 import com.example.Diplomna.classValid.CrmHelper;
+import com.example.Diplomna.dto.AccessStatusDto;
+import com.example.Diplomna.dto.UserDto;
+import com.example.Diplomna.dto.VideoCategoryDto;
+import com.example.Diplomna.dto.VideoDto;
 import com.example.Diplomna.enums.NotFoundException;
+import com.example.Diplomna.model.AccessStatus;
 import com.example.Diplomna.model.User;
 import com.example.Diplomna.model.Video;
 import com.example.Diplomna.GrabePicture.VideoMetadataRepr;
+import com.example.Diplomna.model.VideoCategory;
+import com.example.Diplomna.repo.AccessStatusRepo;
 import com.example.Diplomna.repo.UserRepo;
+import com.example.Diplomna.repo.VideoCategoryRepo;
 import com.example.Diplomna.repo.VideoRepo;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
@@ -24,6 +32,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Time;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -36,6 +45,8 @@ import java.util.stream.Stream;
 @Service
 public class VideoService {
     private final VideoRepo videoRepo;
+    private final VideoCategoryRepo videoCategoryRepo;
+    private final AccessStatusRepo accessStatusRepo;
     private final Logger logger = LoggerFactory.getLogger(VideoService.class);
     @Value("${data.folder}")
     private String dataFolder;
@@ -44,7 +55,9 @@ public class VideoService {
     private UserService userService;
 
     @Autowired
-    public VideoService(VideoRepo videoRepo, UserRepo userRepo) {
+    public VideoService(VideoRepo videoRepo, VideoCategoryRepo videoCategoryRepo, AccessStatusRepo accessStatusRepo, UserRepo userRepo) {
+        this.videoCategoryRepo = videoCategoryRepo;
+        this.accessStatusRepo = accessStatusRepo;
         this.userRepo = userRepo;
         this.videoRepo = videoRepo;
     }
@@ -73,13 +86,44 @@ public class VideoService {
 
 
     }
-    public List<VideoMetadataRepr> findAll(int accessStatus) {
-        return videoRepo.findAll().stream()
+    public List<VideoDto> findAll(int accessStatus) {
+        List<Video> videos = videoRepo.findAll();
+        List<VideoDto> response = new ArrayList<>();
+
+        for (Video video : videos) {
+            Optional<User> user = userRepo.findById(video.getUser());
+            Optional<VideoCategory> category = videoCategoryRepo.findById(video.getVideoCategory());
+            Optional<AccessStatus> status = accessStatusRepo.findById((long) accessStatus);
+
+            response.add(VideoDto.builder()
+                            .id(video.getId())
+                            .title(video.getTitle())
+                            .uri(video.getPath())
+                            .description(video.getDescription())
+                            .videoCategory(VideoCategoryDto.builder()
+                                    .id(category.get().getId())
+                                    .title(category.get().getTitle())
+                                    .build())
+                            .accessStatus(AccessStatusDto.builder()
+                                    .id(status.get().getId())
+                                    .status(status.get().getStatus())
+                                    .build())
+                            .user(UserDto.builder()
+                                    .id(user.get().getId())
+                                    .email(user.get().getEmail())
+                                    .displayName(user.get().getUsername())
+                                    .photoUrl(user.get().getPhotoUrl())
+                                    .build())
+                    .build());
+        }
+        /*return videoRepo.findAll().stream()
                 .filter(video -> video.getAccessStatus() == accessStatus)
                 .flatMap(video -> userService.findUserById(video.getUser())
                         .map(user -> Stream.of(convert(video, user)))
                         .orElseGet(Stream::empty))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList());*/
+
+        return response;
     }
     public Optional<VideoMetadataRepr> findById(Long id) {
         return videoRepo.findById(id)
