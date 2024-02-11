@@ -82,6 +82,17 @@ public class ChannelService {
         return subscribedVideos;
     }
 
+    public Channel createChannel(String authorizationHeader) {
+        CrmHelper crmHelper = new CrmHelper(userRepo);
+        Long userId = crmHelper.userId(authorizationHeader);
+        User user = userRepo.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        Channel channel = new Channel();
+        channel.setUser(user.getId());
+        channel.setBannerPath("DEFAULT_BANNER_PATH");
+        return channelRepo.save(channel);
+    }
+
 
     public List<Video> getAllVideosForUser(String authorizationHeader) {
         CrmHelper crmHelper = new CrmHelper(userRepo);
