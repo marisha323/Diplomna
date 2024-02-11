@@ -16,5 +16,7 @@ public interface PlayListVideoRepo extends JpaRepository<PlayListVideo,Long> {
         return findEntry(playListId, videoId) != null;
     }
     List<PlayListVideo> findAllByPlayListId(Long playListId);
+    @Query("SELECT pv FROM PlayListVideo pv WHERE pv.playList = :playlistId")
+    List<PlayListVideo> findByPlayListId(Long playlistId);
 }
 

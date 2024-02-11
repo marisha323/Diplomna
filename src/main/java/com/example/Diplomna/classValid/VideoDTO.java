@@ -20,6 +20,9 @@ public class VideoDTO {
     }
 
 
+    public VideoDTO() {
+    }
+
     public VideoDTO(Video video, String userName, String photoUrl, byte[] photoBete) {
 
         this.id = video.getId();

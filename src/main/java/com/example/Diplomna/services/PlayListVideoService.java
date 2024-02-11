@@ -11,6 +11,8 @@ import com.example.Diplomna.repo.UserRepo;
 import com.example.Diplomna.repo.VideoRepo;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +56,7 @@ public class PlayListVideoService {
 //    }
 
     public void addVideoPlayList(PlayListVideoCrm playListVideoCrm) {
-        if(playListVideoCrm.getVideoId()!=null && playListVideoCrm.getPlayListId()!= null){
+        if (playListVideoCrm.getVideoId() != null && playListVideoCrm.getPlayListId() != null) {
             logger.info("playListVideoCrm.getVideoId() " + playListVideoCrm.getVideoId());
             PlayListVideo existingEntry = playListVideoRepo.findEntry(playListVideoCrm.getPlayListId(), playListVideoCrm.getVideoId());
 
@@ -88,26 +90,54 @@ public class PlayListVideoService {
 
         if (playlistOptional.isPresent()) {
             PlayListVideo playlist = playlistOptional.get();
-            List<Long> videoIds = Collections.singletonList(playlist.getVideo());
+            Long videoId = playlist.getVideo();
+            List<Long> videoIds = Collections.singletonList(videoId); // Створити список з одним елементом
 
-            for (Long videoId : videoIds) {
-                Optional<Video> videoOptional = videoRepo.findById(videoId);
+            for (Long id : videoIds) {
+                Optional<Video> videoOptional = videoRepo.findById(id);
                 if (videoOptional.isPresent()) {
                     Video video = videoOptional.get();
                     Optional<User> userOptional = userRepo.findById(video.getUser());
                     if (userOptional.isPresent()) {
                         User user = userOptional.get();
-                        byte[] avatarBytes = new byte[0];
                         try {
-                            avatarBytes = downloadAvaUser(user.getId());
+                            byte[] avatarBytes = downloadAvaUser(user.getId());
+                            VideoDTO videoDTO = new VideoDTO(video, user.getUserName(), user.getPhotoUrl(), avatarBytes);
+                            videoDTOList.add(videoDTO);
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
-                        VideoDTO videoDTO = new VideoDTO(video, user.getUserName(), user.getPhotoUrl(), avatarBytes);
-                        videoDTOList.add(videoDTO);
                     }
                 }
             }
+        }
+        return videoDTOList;
+    }
+
+    public List<VideoDTO> getVideosFromPlaylist2(Long playlistId) {
+        List<VideoDTO> videoDTOList = new ArrayList<>();
+
+        List<PlayListVideo> playListVideos = playListVideoRepo.findByPlayListId(playlistId);
+
+        for (PlayListVideo playListVideo : playListVideos) {
+            logger.info("playListVideo " + playListVideo);
+
+            Long videoId = playListVideo.getVideo(); // Отримати ідентифікатор відео
+            logger.info("videoId " + videoId);
+            Optional<Video> videoOptional = videoRepo.findById(videoId);
+            videoOptional.ifPresent(video -> {
+                Optional<User> userOptional = userRepo.findById(video.getUser());
+                userOptional.ifPresent(user -> {
+                    byte[] avatarBytes;
+                    try {
+                        avatarBytes = downloadAvaUser(user.getId());
+                        VideoDTO videoDTO = new VideoDTO(video, user.getUserName(), user.getPhotoUrl(), avatarBytes);
+                        videoDTOList.add(videoDTO);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+            });
         }
 
         return videoDTOList;
