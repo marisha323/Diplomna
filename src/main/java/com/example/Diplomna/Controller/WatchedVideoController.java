@@ -101,7 +101,7 @@ public class WatchedVideoController {
     }
 
     @GetMapping("/disliked")
-    public ResponseEntity<Boolean> gwtIsDisLiked (Long userId, Long videoId) {
+    public ResponseEntity<Boolean> getIsDisLiked (Long userId, Long videoId) {
         boolean status = watchedVideoService.getIsLiked(userId, videoId, 2L);
 
         return ResponseEntity.ok(status);
