@@ -116,7 +116,7 @@ public class VideoService {
                             .user(UserDto.builder()
                                     .id(user.get().getId())
                                     .email(user.get().getEmail())
-                                    .displayName(user.get().getUsername())
+                                    .displayName(user.get().getUserName())
                                     .photoUrl(user.get().getPhotoUrl())
                                     .build())
                     .build());

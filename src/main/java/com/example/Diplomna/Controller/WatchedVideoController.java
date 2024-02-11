@@ -35,8 +35,8 @@ public class WatchedVideoController {
         this.watchedVideoRepo = watchedVideoRepo;
     }
 
-    @GetMapping("/like")
-    public String like(@RequestHeader("Authorization")String authorizationHeader, Like_or_Dislike_Crm likeOrDislikeCrm) {
+    @PostMapping("/like")
+    public String like(@RequestHeader("Authorization")String authorizationHeader,@RequestBody Like_or_Dislike_Crm likeOrDislikeCrm) {
         CrmHelper crmHelper = new CrmHelper(userRepo);
         Long userId = crmHelper.userId(authorizationHeader);
         logger.info("userId " + userId);

@@ -64,6 +64,7 @@ public class VideoController {
     }
     @GetMapping("/{id}")
     public ResponseEntity<?> findVideoMetadataById(@RequestHeader("Authorization")String authorizationHeader, @PathVariable("id") Long videoId) {
+        System.out.println("Get Video");
         CrmHelper crmHelper = new CrmHelper(userRepo);
         Long userId = crmHelper.userId(authorizationHeader);
         if (videoId != null && userId !=null) {

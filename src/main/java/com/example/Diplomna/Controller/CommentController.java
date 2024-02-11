@@ -10,6 +10,8 @@ import com.example.Diplomna.services.VideoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -33,7 +35,7 @@ public class CommentController {
     }
 
     @PostMapping("/add-comment")
-    public String comment(@RequestHeader("Authorization")String authorizationHeader, Comment_Crm comment_crm) {
+    public ResponseEntity<Object> comment(@RequestHeader("Authorization")String authorizationHeader, @RequestBody Comment_Crm comment_crm) {
         CrmHelper crmHelper = new CrmHelper(userRepo);
         Long userId = crmHelper.userId(authorizationHeader);
         logger.info("userId " + userId);
@@ -48,15 +50,16 @@ public class CommentController {
             comment.setDateTime(LocalDateTime.now());
             logger.info("comment" + comment);
             commentRepo.save(comment);
-            return "jjkj";
+            return new ResponseEntity<Object>(HttpStatus.CREATED);
         }
         else {
-            return "ERROR";
+            return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @GetMapping("/all")
-    public List<Comment_Crm> findAllCommentsByVideoId(@RequestParam Long videoId) {
-        return commentService.findAllConverted(videoId);
+    public ResponseEntity<Object> findAllCommentsByVideoId(@RequestParam Long videoId) {
+        return ResponseEntity.ok(commentService.findAllConverted(videoId));
+//        return commentService.findAllConverted(videoId);
     }
 }
