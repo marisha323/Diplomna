@@ -1,7 +1,6 @@
 package com.example.Diplomna.services;
 
 import com.example.Diplomna.Controller.VideoController;
-import com.example.Diplomna.GrabePicture.NewVideoRepr;
 import com.example.Diplomna.classValid.CrmHelper;
 import com.example.Diplomna.classValid.Like_or_Dislike_Crm;
 import com.example.Diplomna.classValid.VideoDTO;
@@ -20,7 +19,6 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -102,6 +100,16 @@ public class WatchedVideoService {
     private Long getUserIdFromAuthorizationHeader(String authorizationHeader) {
         CrmHelper crmHelper = new CrmHelper(userRepo);
         return crmHelper.userId(authorizationHeader);
+    }
+
+    public boolean getIsLiked(Long userId, Long videoId, Long gradeId) {
+        WatchedVideo video = watchedVideoRepo.findByVideoId(videoId).stream()
+                .filter(data -> data.getUser() == userId)
+                .filter(data -> data.getGrade() == gradeId)
+                .findFirst().orElse(null);
+
+
+        return video != null;
     }
 }
 
