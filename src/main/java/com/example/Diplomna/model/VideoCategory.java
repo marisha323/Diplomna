@@ -1,9 +1,11 @@
 package com.example.Diplomna.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.io.Serializable;
 
+@Getter
 @Entity
 public class VideoCategory implements Serializable {
     @Id
@@ -12,16 +14,8 @@ public class VideoCategory implements Serializable {
     private Long id;
     private String title;
 
-    public Long getId() {
-        return id;
-    }
-
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
     }
 
     public void setTitle(String title) {
