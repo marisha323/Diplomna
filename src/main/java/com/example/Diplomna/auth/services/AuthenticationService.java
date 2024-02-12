@@ -41,6 +41,7 @@ public class AuthenticationService {
                 .userName(request.getUserName())
                 .email(request.getUserEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
+                .photoUrl("src/main/resources/user/avauser.jpg")
                 .role(Role.USER)
                 .build();
         userRepo.save(user);
