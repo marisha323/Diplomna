@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PlayListVideoService {
@@ -38,26 +39,21 @@ public class PlayListVideoService {
 //        return !resultList.isEmpty();
 //    }
 
-    public void addVideoPlayList(PlayListVideoCrm playListVideoCrm) {
-        if(playListVideoCrm.getVideoId()!=null && playListVideoCrm.getPlayListId()!= null){
-            logger.info("playListVideoCrm.getVideoId() " + playListVideoCrm.getVideoId());
-            PlayListVideo existingEntry = playListVideoRepo.findEntry(playListVideoCrm.getPlayListId(), playListVideoCrm.getVideoId());
+    public boolean addVideoPlayList(PlayListVideoCrm playListVideoCrm) {
+        Optional<PlayListVideo> existingEntry = playListVideoRepo.findAll().stream()
+                .filter(data -> data.getVideo() == playListVideoCrm.getVideoId())
+                .filter(data -> data.getPlayList() == playListVideoCrm.getPlayListId())
+                .findFirst();
 
-            logger.info("existingEntry " + existingEntry);
-
-            if (existingEntry == null) {
-
-                logger.info("playListVideoCrm.getPlayListId() " + playListVideoCrm.getPlayListId());
-                PlayListVideo playListVideo = new PlayListVideo();
-                playListVideo.setPlayList(playListVideoCrm.getPlayListId());
-                playListVideo.setVideo(playListVideoCrm.getVideoId());
-                playListVideoRepo.save(playListVideo);
-                logger.info("playListVideoCrm.getVideoId() " + playListVideoCrm.getVideoId());
-            } else {
-                throw new IllegalArgumentException("Відео з такими id вже існує в плейлисті.");
-            }
+        if (existingEntry.isEmpty()) {
+            PlayListVideo playListVideo = new PlayListVideo();
+            playListVideo.setPlayList(playListVideoCrm.getPlayListId());
+            playListVideo.setVideo(playListVideoCrm.getVideoId());
+            playListVideoRepo.save(playListVideo);
         } else {
-            throw new IllegalArgumentException("Невірні параметри для додавання відео в плейлист");
+            playListVideoRepo.delete(existingEntry.get());
         }
+
+        return true;
     }
 }

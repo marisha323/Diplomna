@@ -26,13 +26,13 @@ public class SubscriptionController {
         this.userRepo = userRepo;
     }
 
-    @PostMapping("/add-sub")
-    public ResponseEntity<?> addSubscription(@RequestHeader("Authorization") String authorizationHeader, SubscriptionCrm subscriptionCrm) {
+    @PostMapping("/toggle-subscription")
+    public ResponseEntity<Boolean> toggleSubscription(@RequestHeader("Authorization") String authorizationHeader, @RequestBody SubscriptionCrm subscriptionCrm) {
         try {
-            subscriptionService.addSubscription(authorizationHeader, subscriptionCrm);
-            return ResponseEntity.status(HttpStatus.OK).build();
+            subscriptionService.toggleSubscription(authorizationHeader, subscriptionCrm);
+            return ResponseEntity.ok(true);
         } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.ok(false);
         }
     }
 

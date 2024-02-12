@@ -37,8 +37,8 @@ public class WatchedVideoController {
     }
 
     @PostMapping("/like")
-    public String like(@RequestHeader("Authorization")String authorizationHeader,@RequestBody Like_or_Dislike_Crm likeOrDislikeCrm) {
-        CrmHelper crmHelper = new CrmHelper(userRepo);
+    public ResponseEntity<Boolean> like(@RequestHeader("Authorization")String authorizationHeader,@RequestBody Like_or_Dislike_Crm likeOrDislikeCrm) {
+        /*CrmHelper crmHelper = new CrmHelper(userRepo);
         Long userId = crmHelper.userId(authorizationHeader);
         logger.info("userId " + userId);
             logger.info("watchedVideoService " + videoService.existsById(likeOrDislikeCrm.getVideo_id()));
@@ -52,11 +52,14 @@ public class WatchedVideoController {
             return "jjjjj";
         } else {
             return "ERROR";
-        }
+        }*/
+        boolean result = watchedVideoService.setLike(authorizationHeader, likeOrDislikeCrm);
+
+        return ResponseEntity.ok(result);
     }
-    @GetMapping("/dislike")
-    public String dislike(@RequestHeader("Authorization")String authorizationHeader, Like_or_Dislike_Crm likeOrDislikeCrm) {
-        CrmHelper crmHelper = new CrmHelper(userRepo);
+    @PostMapping ("/dislike")
+    public ResponseEntity<Boolean> dislike(@RequestHeader("Authorization")String authorizationHeader, @RequestBody Like_or_Dislike_Crm likeOrDislikeCrm) {
+        /*CrmHelper crmHelper = new CrmHelper(userRepo);
         Long userId = crmHelper.userId(authorizationHeader);
         logger.info("userId " + userId);
         logger.info("watchedVideoService " + videoService.existsById(likeOrDislikeCrm.getVideo_id()));
@@ -70,7 +73,11 @@ public class WatchedVideoController {
             return "jjjjj";
         } else {
             return "ERROR";
-        }
+        }*/
+
+        boolean result = watchedVideoService.setDisLike(authorizationHeader, likeOrDislikeCrm);
+
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/countlike")
@@ -94,15 +101,22 @@ public class WatchedVideoController {
     }
 
     @GetMapping("/liked")
-    public ResponseEntity<Boolean> gwtIsLiked (Long userId, Long videoId) {
-        boolean status = watchedVideoService.getIsLiked(userId, videoId, 1L);
+    public ResponseEntity<Boolean> gwtIsLiked (@RequestHeader("Authorization") String authorizationHeader, Long videoId) {
+        boolean status = watchedVideoService.getIsLiked(authorizationHeader, videoId, 1L);
 
         return ResponseEntity.ok(status);
     }
 
     @GetMapping("/disliked")
-    public ResponseEntity<Boolean> getIsDisLiked (Long userId, Long videoId) {
-        boolean status = watchedVideoService.getIsLiked(userId, videoId, 2L);
+    public ResponseEntity<Boolean> getIsDisLiked (@RequestHeader("Authorization") String authorizationHeader, Long videoId) {
+        boolean status = watchedVideoService.getIsLiked(authorizationHeader, videoId, 2L);
+
+        return ResponseEntity.ok(status);
+    }
+
+    @GetMapping("/subscribed")
+    public ResponseEntity<Boolean> getIsSubscribed(@RequestHeader("Authorization") String authorizationHeader, Long targetUserId) {
+        boolean status = watchedVideoService.getIsSubscribed(authorizationHeader, targetUserId);
 
         return ResponseEntity.ok(status);
     }

@@ -3,6 +3,8 @@ package com.example.Diplomna.Controller;
 
 import com.example.Diplomna.classValid.Comment_Crm;
 import com.example.Diplomna.classValid.PlaylistCrm;
+import com.example.Diplomna.dto.PlaylistDto;
+import com.example.Diplomna.dto.PlaylistForVideoDto;
 import com.example.Diplomna.model.PlayList;
 import com.example.Diplomna.repo.PlayListRepo;
 import com.example.Diplomna.repo.UserRepo;
@@ -32,7 +34,7 @@ public class PlayListController {
     }
 
     @PostMapping("/create-playlist")
-    public ResponseEntity<String> playList(@RequestHeader("Authorization") String authorizationHeader, PlaylistCrm playlistCrm) {
+    public ResponseEntity<String> playList(@RequestHeader("Authorization") String authorizationHeader, @RequestBody PlaylistCrm playlistCrm) {
 
         try {
             playListService.addPlayList(authorizationHeader, playlistCrm);
@@ -43,15 +45,23 @@ public class PlayListController {
     }
 
     @GetMapping("/user-playlists")
-    public ResponseEntity<List<PlayList>> getUserPlayLists(@RequestHeader("Authorization") String authorizationHeader) {
+    public ResponseEntity<List<PlaylistDto>> getUserPlayLists(@RequestHeader("Authorization") String authorizationHeader) {
         try {
-            List<PlayList> userPlaylists = playListService.getPlayListsByUserId(authorizationHeader);
+            List<PlaylistDto> userPlaylists = playListService.getPlayListsByUserId(authorizationHeader);
             return ResponseEntity.ok(userPlaylists);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
 
-
+    @GetMapping("/for-video")
+    public ResponseEntity<List<PlaylistForVideoDto>> getPlayListsForVideo(@RequestHeader("Authorization") String authorizationHeader, Long videoId) {
+        try {
+            List<PlaylistForVideoDto> userPlaylists = playListService.getPlaylistsForVideo(authorizationHeader, videoId);
+            return ResponseEntity.ok(userPlaylists);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+    }
 
 }

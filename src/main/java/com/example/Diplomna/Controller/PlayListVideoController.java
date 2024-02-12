@@ -14,15 +14,12 @@ public class PlayListVideoController {
     private PlayListVideoService playListVideoService;
 
     @PostMapping("/add-video-playlist")
-    public ResponseEntity<String> addVideoPlayList(PlayListVideoCrm playListVideoCrm) {
+    public ResponseEntity<Boolean> addVideoPlayList(@RequestBody PlayListVideoCrm playListVideoCrm) {
         try {
-            playListVideoService.addVideoPlayList(playListVideoCrm);
-            return ResponseEntity.ok("В плейлист успішно додалося відео");
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
-        catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("В плейлист не додалося відео");
+            boolean status = playListVideoService.addVideoPlayList(playListVideoCrm);
+            return ResponseEntity.ok(status);
+        } catch (Exception e) {
+            return ResponseEntity.ok(false);
         }
     }
     @GetMapping("/all-video-playlist")

@@ -23,6 +23,8 @@ public class SecurityConfiguration {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
+                .requestMatchers("/category/all-category")
+                .permitAll()
                 .requestMatchers("/api/auth/**")
                 .permitAll()
                 .requestMatchers("/api/google/**")

@@ -51,16 +51,24 @@ public class SubscriptionService {
         this.userRepo = userRepo;
         this.videoRepo = videoRepo;
     }
-    public void addSubscription(String authorizationHeader, SubscriptionCrm subscriptionCrm) {
+    public void toggleSubscription(String authorizationHeader, SubscriptionCrm subscriptionCrm) {
         CrmHelper crmHelper = new CrmHelper(userRepo);
         Long userId = crmHelper.userId(authorizationHeader);
-        if (userId != null) {
+
+        Subscription existsSubscription = subscriptionRepo.findByUserIdAndTargetUserId(userId,subscriptionCrm.getTarget_user_id());
+        if (existsSubscription == null) {
             Subscription subscription = new Subscription();
             subscription.setUser(userId);
             subscription.setUser_target(subscriptionCrm.getTarget_user_id());
             subscription.setDateTime(LocalDateTime.now());
-            subscription.setUnsubscribed(true);
+            subscription.setUnsubscribed(false);
             subscriptionRepo.save(subscription);
+        } else if (existsSubscription.isUnsubscribed()) {
+            existsSubscription.setUnsubscribed(false);
+            subscriptionRepo.save(existsSubscription);
+        } else {
+            existsSubscription.setUnsubscribed(true);
+            subscriptionRepo.save(existsSubscription);
         }
     }
     private static VideoWithUserInfo convert(Video video, User user) {
