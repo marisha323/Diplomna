@@ -5,6 +5,7 @@ import com.example.Diplomna.GrabePicture.NewVideoRepr;
 import com.example.Diplomna.GrabePicture.VideoMetadataRepr;
 import com.example.Diplomna.classValid.CrmHelper;
 import com.example.Diplomna.model.History;
+import com.example.Diplomna.model.Video;
 import com.example.Diplomna.model.WatchedVideo;
 import com.example.Diplomna.repo.HistoryRepo;
 import com.example.Diplomna.repo.UserRepo;
@@ -120,6 +121,11 @@ public class VideoController {
         CrmHelper crmHelper = new CrmHelper(userRepo);
         Long userId = crmHelper.userId(authorizationHeader);
         return videoService.countVideoOfMyChannel(userId);
+    }
+
+    @GetMapping("/similar/{videoId}")
+    public List<Video> getVideosWithSimilarTitle(@PathVariable Long videoId) {
+        return videoService.findVideosWithSimilarTitle(videoId);
     }
 
 
