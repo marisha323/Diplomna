@@ -65,10 +65,9 @@ public class Subscription implements Serializable {
             this.user = null;
         }
     }
-    public Long getUser_target() {
-        return user_target != null ? user_target.getId() : null;
+    public User getUser_target() {
+        return user_target != null ? user_target : null;
     }
-
     public void setUser_target(Long user_target) {
         if (user_target != null) {
             User user = new User();

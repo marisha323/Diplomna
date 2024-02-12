@@ -2,6 +2,7 @@ package com.example.Diplomna.Controller;
 
 import com.example.Diplomna.classValid.CrmHelper;
 import com.example.Diplomna.classValid.SubscriptionCrm;
+import com.example.Diplomna.classValid.UserDTO;
 import com.example.Diplomna.model.User;
 import com.example.Diplomna.repo.UserRepo;
 import com.example.Diplomna.services.SubscriptionService;
@@ -51,9 +52,9 @@ public class SubscriptionController {
     }
 
     @GetMapping("/subscribed-users")
-    public ResponseEntity<List<User>> getSubscribedUsers(@RequestHeader("Authorization") String authorizationHeader) {
+    public ResponseEntity<List<UserDTO>> getSubscribedUsers(@RequestHeader("Authorization") String authorizationHeader) {
 
-        List<User> subscribedUsers = subscriptionService.getSubscribedUsers(authorizationHeader);
+        List<UserDTO> subscribedUsers = subscriptionService.getSubscribedUsersInfo(authorizationHeader);
         return ResponseEntity.ok(subscribedUsers);
     }
 }

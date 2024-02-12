@@ -4,6 +4,8 @@ import com.example.Diplomna.GrabePicture.VideoMetadataRepr;
 import com.example.Diplomna.GrabePicture.VideoWithUserInfo;
 import com.example.Diplomna.classValid.CrmHelper;
 import com.example.Diplomna.classValid.SubscriptionCrm;
+import com.example.Diplomna.classValid.UserDTO;
+import com.example.Diplomna.classValid.VideoDTO;
 import com.example.Diplomna.enums.NotFoundException;
 import com.example.Diplomna.enums.Role;
 import com.example.Diplomna.model.Subscription;
@@ -24,10 +26,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -118,25 +117,35 @@ public class SubscriptionService {
     }
 
 
-    public List<User> getSubscribedUsers(@RequestHeader("Authorization") String authorizationHeader) {
+    public List<UserDTO> getSubscribedUsersInfo(@RequestHeader("Authorization") String authorizationHeader) {
         CrmHelper crmHelper = new CrmHelper(userRepo);
         Long userId = crmHelper.userId(authorizationHeader);
         logger.info("userId: " + userId);
 
         List<Subscription> subscriptions = subscriptionRepo.findByUser_Id(userId);
+        logger.info("subscriptions: " + subscriptions);
+        List<UserDTO> userDTOs = subscriptions.stream()
+                    .map(subscription -> {
+                    User userTarget = subscription.getUser_target();
+                    logger.info("userTarget: " + userTarget);
+                    if (userTarget != null) {
+                        Long id = userTarget.getId();
+                        String userName = userTarget.getUserName();
+                        String photoUrl = userTarget.getPhotoUrl();
 
-        return subscriptions.stream()
-                .map(subscription -> {
-                    User user = new User(subscription.getUser_target());
-                    if (user.getRole() == null) {
-                        user.setRole(Role.USER);
+                        try {
+                            byte[] avatarBytes = downloadAvaUser(id);
+                        return new UserDTO(id, userName, photoUrl, avatarBytes);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    } else {
+                        return null;
                     }
-                    return user;
                 })
-                .collect(Collectors.toList());
+                 .collect(Collectors.toList());
+
+        return userDTOs;
     }
-
-
-
 
 }

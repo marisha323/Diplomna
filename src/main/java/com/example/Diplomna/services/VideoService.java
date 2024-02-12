@@ -155,4 +155,15 @@ public class VideoService {
         return videoRepo.countVideoId(id);
     }
 
+
+    public List<Video> findVideosWithSimilarTitle(Long videoId) {
+        Video video = videoRepo.findById(videoId).orElse(null);
+        if (video == null) {
+
+            return null;
+        }
+        String title = video.getTitle();
+        return videoRepo.findByTitleContaining(title);
+    }
+
 }
