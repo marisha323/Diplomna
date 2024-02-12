@@ -14,7 +14,8 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class MailService {
-    private final String DOMAIN = "http://localhost:8085";
+//    private final String DOMAIN = "http://localhost:8085";
+    private final String DOMAIN = "http://nikstep.com.ua:8085";
     private final String ROUTE = "/api/auth/activate";
 
     private final ActivationLinkService activationLinkService;
