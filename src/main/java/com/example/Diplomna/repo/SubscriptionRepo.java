@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface SubscriptionRepo extends JpaRepository<Subscription, Long> {
-    @Query("SELECT s.user_target.id FROM Subscription s WHERE s.user.id = :userId")
+    @Query("SELECT s.user_target.id FROM Subscription s WHERE s.user.id = :userId AND s.Unsubscribed != true")
     List<Long> findSubscribedUserIdsByUserId(@Param("userId") Long userId);
 
     @Query("SELECT COUNT(s.id) FROM Subscription s WHERE s.user_target.id = :userId")

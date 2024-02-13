@@ -8,6 +8,8 @@ import com.example.Diplomna.dto.PlaylistForVideoDto;
 import com.example.Diplomna.model.PlayList;
 import com.example.Diplomna.repo.PlayListRepo;
 import com.example.Diplomna.repo.UserRepo;
+import com.example.Diplomna.request.DeletePlaylistRequest;
+import com.example.Diplomna.request.PlaylistRequest;
 import com.example.Diplomna.services.PlayListService;
 import jdk.jshell.Snippet;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,27 @@ public class PlayListController {
     public PlayListController(PlayListRepo playListRepo, UserRepo userRepo) {
         this.playListRepo = playListRepo;
         this.userRepo = userRepo;
+    }
+
+    @PostMapping("/edit")
+    public ResponseEntity<Boolean> editPlaylist(@RequestBody PlaylistRequest request) {
+        try {
+            boolean status = playListService.updatePlaylist(request);
+
+            return ResponseEntity.ok(true);
+        } catch (Exception ex) {
+            return ResponseEntity.ok(false);
+        }
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Boolean> deletePlaylist(@RequestBody DeletePlaylistRequest request) {
+        try {
+            boolean status = playListService.deletePlaylist(request);
+            return ResponseEntity.ok(true);
+        } catch (Exception ex) {
+            return ResponseEntity.ok(false);
+        }
     }
 
     @PostMapping("/create-playlist")

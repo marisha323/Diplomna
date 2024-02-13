@@ -4,11 +4,10 @@ import com.example.Diplomna.GrabePicture.VideoMetadataRepr;
 import com.example.Diplomna.GrabePicture.VideoWithUserInfo;
 import com.example.Diplomna.classValid.CrmHelper;
 import com.example.Diplomna.classValid.SubscriptionCrm;
+import com.example.Diplomna.dto.*;
 import com.example.Diplomna.enums.NotFoundException;
 import com.example.Diplomna.enums.Role;
-import com.example.Diplomna.model.Subscription;
-import com.example.Diplomna.model.User;
-import com.example.Diplomna.model.Video;
+import com.example.Diplomna.model.*;
 import com.example.Diplomna.repo.SubscriptionRepo;
 import com.example.Diplomna.repo.UserRepo;
 import com.example.Diplomna.repo.VideoRepo;
@@ -97,25 +96,36 @@ public class SubscriptionService {
         Video video = videoRepo.findByTitle(name).orElseThrow(() -> new NotFoundException());
         return Files.readAllBytes(new File(video.getPath()).toPath());
     }
-    public ResponseEntity<List<VideoWithUserInfo>> getVideoSubUser(@RequestHeader("Authorization") String authorizationHeader) {
+    public List<SubscribersVideoDto> getVideoSubUser(String authorizationHeader) {
         CrmHelper crmHelper = new CrmHelper(userRepo);
         Long userId = crmHelper.userId(authorizationHeader);
         List<Long> subscribedUserIds = subscriptionRepo.findSubscribedUserIdsByUserId(userId);
-        logger.info("subscribedUserIds: " + subscribedUserIds);
         LocalDate endDate = LocalDate.now();
         LocalDate startDate = endDate.minusMonths(1).withDayOfMonth(1);
-        logger.info("startDate: " + startDate);
-        logger.info("endDate: " + endDate);
-        List<VideoWithUserInfo> subscribedVideos = videoRepo.findVideosByUserIdsAndDateRange(subscribedUserIds, startDate, endDate)
-                .stream()
-                .flatMap(video -> userService.findUserById(video.getUser())
-                        .map(user -> Stream.of(convert(video,user)))
-                        .orElseGet(Stream::empty))
-                .collect(Collectors.toList());
-        logger.info("subscribedVideos " + subscribedVideos);
-        subscribedVideos.sort(Comparator.comparing(VideoWithUserInfo::getUploadDate, Comparator.nullsLast(Comparator.reverseOrder())));
-        logger.info("subscribedVideos: " + subscribedVideos);
-        return ResponseEntity.ok(subscribedVideos);
+        List<Video> subscribedVideos = videoRepo.findVideosByUserIdsAndDateRange(subscribedUserIds, startDate, endDate).stream()
+                .filter(data->data.getAccessStatus() == 1)
+                .toList();
+        List<SubscribersVideoDto> result = new ArrayList<>();
+
+        for (Video video : subscribedVideos) {
+            Optional<User> user = userRepo.findById(video.getUser());
+
+            result.add(SubscribersVideoDto.builder()
+                    .id(video.getId())
+                    .title(video.getTitle())
+                    .uri(video.getPath())
+                    .description(video.getDescription())
+                    .views(video.getViews())
+                    .user(UserDto.builder()
+                            .id(user.get().getId())
+                            .email(user.get().getEmail())
+                            .displayName(user.get().getUserName())
+                            .photoUrl(user.get().getPhotoUrl())
+                            .build())
+                    .build());
+        }
+
+        return result;
     }
 
     public long countSubscription(Long id) {
@@ -133,22 +143,28 @@ public class SubscriptionService {
     }
 
 
-    public List<User> getSubscribedUsers(@RequestHeader("Authorization") String authorizationHeader) {
+    public List<UserDto> getSubscribedUsers(@RequestHeader("Authorization") String authorizationHeader) {
         CrmHelper crmHelper = new CrmHelper(userRepo);
         Long userId = crmHelper.userId(authorizationHeader);
         logger.info("userId: " + userId);
 
-        List<Subscription> subscriptions = subscriptionRepo.findByUser_Id(userId);
+        List<Subscription> subscriptions = subscriptionRepo.findAll().stream()
+                .filter(data->data.getUser() == userId)
+                .filter(data-> !data.isUnsubscribed())
+                .toList();
+        List<UserDto> result = new ArrayList<>();
 
-        return subscriptions.stream()
-                .map(subscription -> {
-                    User user = new User(subscription.getUser_target());
-                    if (user.getRole() == null) {
-                        user.setRole(Role.USER);
-                    }
-                    return user;
-                })
-                .collect(Collectors.toList());
+        for (Subscription item: subscriptions) {
+            Optional<User> user = userRepo.findById(item.getUser_target());
+            result.add(UserDto.builder()
+                            .id(user.get().getId())
+                            .email(null)
+                            .displayName(user.get().getUserName())
+                            .photoUrl(user.get().getPhotoUrl())
+                    .build());
+        }
+
+        return result;
     }
 
 

@@ -2,7 +2,11 @@ package com.example.Diplomna.Controller;
 
 import com.example.Diplomna.classValid.CrmHelper;
 import com.example.Diplomna.classValid.SubscriptionCrm;
+import com.example.Diplomna.dto.SubscribersVideoDto;
+import com.example.Diplomna.dto.UserDto;
+import com.example.Diplomna.dto.VideoDto;
 import com.example.Diplomna.model.User;
+import com.example.Diplomna.model.Video;
 import com.example.Diplomna.repo.UserRepo;
 import com.example.Diplomna.services.SubscriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,10 +40,10 @@ public class SubscriptionController {
         }
     }
 
-    @GetMapping("/get-video-sub-user")
-    public ResponseEntity<?> getVideoSubUser(@RequestHeader("Authorization") String authorizationHeader){
+    @GetMapping("/videos")
+    public ResponseEntity<List<SubscribersVideoDto>> getVideoSubUser(@RequestHeader("Authorization") String authorizationHeader){
 
-        return subscriptionService.getVideoSubUser(authorizationHeader);
+        return ResponseEntity.ok(subscriptionService.getVideoSubUser(authorizationHeader));
     }
 
 
@@ -51,9 +55,9 @@ public class SubscriptionController {
     }
 
     @GetMapping("/subscribed-users")
-    public ResponseEntity<List<User>> getSubscribedUsers(@RequestHeader("Authorization") String authorizationHeader) {
+    public ResponseEntity<List<UserDto>> getSubscribedUsers(@RequestHeader("Authorization") String authorizationHeader) {
 
-        List<User> subscribedUsers = subscriptionService.getSubscribedUsers(authorizationHeader);
+        List<UserDto> subscribedUsers = subscriptionService.getSubscribedUsers(authorizationHeader);
         return ResponseEntity.ok(subscribedUsers);
     }
     @DeleteMapping("/unsubscribe")

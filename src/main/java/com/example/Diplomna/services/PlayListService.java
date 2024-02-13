@@ -9,6 +9,8 @@ import com.example.Diplomna.model.PlayListVideo;
 import com.example.Diplomna.repo.PlayListRepo;
 import com.example.Diplomna.repo.PlayListVideoRepo;
 import com.example.Diplomna.repo.UserRepo;
+import com.example.Diplomna.request.DeletePlaylistRequest;
+import com.example.Diplomna.request.PlaylistRequest;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -112,5 +114,32 @@ public class PlayListService {
         } else {
             throw new IllegalArgumentException("Невірний ідентифікатор користувача");
         }
+    }
+
+    public boolean updatePlaylist(PlaylistRequest request) {
+        Optional<PlayList> playList = playListRepo.findById(request.getId());
+
+        if (playList.isEmpty()) {
+            return false;
+        }
+
+        playList.get().setAccessStatus(request.getAccessStatus());
+        playList.get().setTitle(request.getTitle());
+        playListRepo.save(playList.get());
+
+        return true;
+    }
+
+    public boolean deletePlaylist(DeletePlaylistRequest request) {
+        Optional<PlayList> playList = playListRepo.findById(request.getId());
+
+        if (playList.isEmpty()) {
+            return false;
+        }
+
+        playListRepo.delete(playList.get());
+
+        return true;
+
     }
 }
