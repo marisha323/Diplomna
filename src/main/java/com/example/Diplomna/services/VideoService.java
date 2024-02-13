@@ -225,4 +225,43 @@ public class VideoService {
         return videoRepo.countVideoId(id);
     }
 
+    public List<VideoDto> findAllByUserId(Long userId) {
+        List<Video> videos = videoRepo.findAll().stream()
+                .filter(video -> video.getAccessStatus() == 1)
+                .filter(video -> video.getUser() == userId)
+                .toList();
+        List<VideoDto> response = new ArrayList<>();
+
+        for (Video video : videos) {
+            Optional<User> user = userRepo.findById(video.getUser());
+            Optional<VideoCategory> category = videoCategoryRepo.findById(video.getVideoCategory());
+            Optional<AccessStatus> status = accessStatusRepo.findById((long) 1);
+
+            response.add(VideoDto.builder()
+                    .id(video.getId())
+                    .title(video.getTitle())
+                    .uri(video.getPath())
+                    .description(video.getDescription())
+                    .uploadDate(video.getUploadDate())
+                    .time(video.getTime())
+                    .views(video.getViews())
+                    .videoCategory(VideoCategoryDto.builder()
+                            .id(category.get().getId())
+                            .title(category.get().getTitle())
+                            .build())
+                    .accessStatus(AccessStatusDto.builder()
+                            .id(status.get().getId())
+                            .status(status.get().getStatus())
+                            .build())
+                    .user(UserDto.builder()
+                            .id(user.get().getId())
+                            .email(user.get().getEmail())
+                            .displayName(user.get().getUserName())
+                            .photoUrl(user.get().getPhotoUrl())
+                            .build())
+                    .build());
+        }
+
+        return response;
+    }
 }

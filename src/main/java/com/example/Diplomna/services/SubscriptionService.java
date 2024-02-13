@@ -1,12 +1,10 @@
 package com.example.Diplomna.services;
 
-import com.example.Diplomna.GrabePicture.VideoMetadataRepr;
 import com.example.Diplomna.GrabePicture.VideoWithUserInfo;
 import com.example.Diplomna.classValid.CrmHelper;
 import com.example.Diplomna.classValid.SubscriptionCrm;
 import com.example.Diplomna.dto.*;
 import com.example.Diplomna.enums.NotFoundException;
-import com.example.Diplomna.enums.Role;
 import com.example.Diplomna.model.*;
 import com.example.Diplomna.repo.SubscriptionRepo;
 import com.example.Diplomna.repo.UserRepo;
@@ -14,7 +12,6 @@ import com.example.Diplomna.repo.VideoRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestHeader;
 
@@ -24,11 +21,8 @@ import java.nio.file.Files;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class SubscriptionService {
@@ -158,7 +152,7 @@ public class SubscriptionService {
             Optional<User> user = userRepo.findById(item.getUser_target());
             result.add(UserDto.builder()
                             .id(user.get().getId())
-                            .email(null)
+                            .email(user.get().getEmail())
                             .displayName(user.get().getUserName())
                             .photoUrl(user.get().getPhotoUrl())
                     .build());
@@ -168,6 +162,12 @@ public class SubscriptionService {
     }
 
 
+    public int getSubscriptionsCount(Long userId) {
 
+        return (int) subscriptionRepo.countSubscribers(userId);
+    }
 
+    public Integer getVideoCount(Long userId) {
+        return (int) videoRepo.countVideoId(userId);
+    }
 }

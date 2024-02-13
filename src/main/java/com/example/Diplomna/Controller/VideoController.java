@@ -58,8 +58,14 @@ public class VideoController {
     @GetMapping("/all")
     public ResponseEntity<List<VideoDto>> findAll()
     {
-        System.out.println("Request");
         return ResponseEntity.ok(videoService.findAll(1));
+//        return videoService.findAll(1);
+    }
+
+    @GetMapping("/all-by-user")
+    public ResponseEntity<List<VideoDto>> findAllByUser(@RequestParam Long userId)
+    {
+        return ResponseEntity.ok(videoService.findAllByUserId(userId));
 //        return videoService.findAll(1);
     }
     @GetMapping("/{id}")

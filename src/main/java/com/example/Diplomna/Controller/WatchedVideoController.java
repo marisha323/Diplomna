@@ -3,6 +3,8 @@ package com.example.Diplomna.Controller;
 import com.example.Diplomna.classValid.CrmHelper;
 import com.example.Diplomna.classValid.Like_or_Dislike_Crm;
 import com.example.Diplomna.classValid.VideoDTO;
+import com.example.Diplomna.dto.PlayListVideoDto;
+import com.example.Diplomna.model.PlayListVideo;
 import com.example.Diplomna.model.Video;
 import com.example.Diplomna.model.WatchedVideo;
 import com.example.Diplomna.repo.UserRepo;
@@ -38,43 +40,12 @@ public class WatchedVideoController {
 
     @PostMapping("/like")
     public ResponseEntity<Boolean> like(@RequestHeader("Authorization")String authorizationHeader,@RequestBody Like_or_Dislike_Crm likeOrDislikeCrm) {
-        /*CrmHelper crmHelper = new CrmHelper(userRepo);
-        Long userId = crmHelper.userId(authorizationHeader);
-        logger.info("userId " + userId);
-            logger.info("watchedVideoService " + videoService.existsById(likeOrDislikeCrm.getVideo_id()));
-        if (videoService.existsById(likeOrDislikeCrm.getVideo_id()) && userId != null) {
-            WatchedVideo watchedVideo = new WatchedVideo();
-            watchedVideo.setUser(userId);
-            watchedVideo.setVideo(likeOrDislikeCrm.getVideo_id());
-            watchedVideo.setGrade(likeOrDislikeCrm.getGrade_id());
-            watchedVideo.setGradeDate(LocalDateTime.now());
-            watchedVideoRepo.save(watchedVideo);
-            return "jjjjj";
-        } else {
-            return "ERROR";
-        }*/
         boolean result = watchedVideoService.setLike(authorizationHeader, likeOrDislikeCrm);
 
         return ResponseEntity.ok(result);
     }
     @PostMapping ("/dislike")
     public ResponseEntity<Boolean> dislike(@RequestHeader("Authorization")String authorizationHeader, @RequestBody Like_or_Dislike_Crm likeOrDislikeCrm) {
-        /*CrmHelper crmHelper = new CrmHelper(userRepo);
-        Long userId = crmHelper.userId(authorizationHeader);
-        logger.info("userId " + userId);
-        logger.info("watchedVideoService " + videoService.existsById(likeOrDislikeCrm.getVideo_id()));
-        if (videoService.existsById(likeOrDislikeCrm.getVideo_id()) && userId != null) {
-            WatchedVideo watchedVideo = new WatchedVideo();
-            watchedVideo.setUser(userId);
-            watchedVideo.setVideo(likeOrDislikeCrm.getVideo_id());
-            watchedVideo.setGrade(likeOrDislikeCrm.getGrade_id());
-            watchedVideo.setGradeDate(LocalDateTime.now());
-            watchedVideoRepo.save(watchedVideo);
-            return "jjjjj";
-        } else {
-            return "ERROR";
-        }*/
-
         boolean result = watchedVideoService.setDisLike(authorizationHeader, likeOrDislikeCrm);
 
         return ResponseEntity.ok(result);
@@ -95,9 +66,9 @@ public class WatchedVideoController {
     }
 
 
-    @GetMapping("/liked-videos/{gradeId}")
-    public List<VideoDTO> getLikedVideosByUser(@RequestHeader("Authorization") String authorizationHeader, @PathVariable Long gradeId) {
-        return watchedVideoService.getLikedVideosByUser2(authorizationHeader, gradeId);
+    @GetMapping("/liked-videos")
+    public ResponseEntity<List<PlayListVideoDto>> getLikedVideosByUser(@RequestHeader("Authorization") String authorizationHeader) {
+        return ResponseEntity.ok(watchedVideoService.getLikedVideosByUser2(authorizationHeader));
     }
 
     @GetMapping("/liked")

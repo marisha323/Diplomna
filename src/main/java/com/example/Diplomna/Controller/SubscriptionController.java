@@ -46,6 +46,18 @@ public class SubscriptionController {
         return ResponseEntity.ok(subscriptionService.getVideoSubUser(authorizationHeader));
     }
 
+    @GetMapping("/subscriptions-count")
+    public ResponseEntity<Integer> getSubscriptionsCount (@RequestParam Long userId) {
+
+        return ResponseEntity.ok(subscriptionService.getSubscriptionsCount(userId));
+    }
+
+    @GetMapping("/video-count")
+    public ResponseEntity<Integer> getVideoCount (@RequestParam Long userId) {
+
+        return ResponseEntity.ok(subscriptionService.getVideoCount(userId));
+    }
+
 
     @GetMapping("/count_subscriptionMyChannel")
     public long countVideoOfMyChannel(@RequestHeader("Authorization") String authorizationHeader) {

@@ -4,6 +4,8 @@ import com.example.Diplomna.Controller.VideoController;
 import com.example.Diplomna.classValid.CrmHelper;
 import com.example.Diplomna.classValid.Like_or_Dislike_Crm;
 import com.example.Diplomna.classValid.VideoDTO;
+import com.example.Diplomna.dto.PlayListVideoDto;
+import com.example.Diplomna.dto.UserDto;
 import com.example.Diplomna.enums.NotFoundException;
 import com.example.Diplomna.model.Subscription;
 import com.example.Diplomna.model.User;
@@ -22,8 +24,10 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -70,34 +74,31 @@ public class WatchedVideoService {
         return watchedVideoRepo.countwatchForVideoId(videoId);
     }
 
-    public List<VideoDTO> getLikedVideosByUser2(String authorizationHeader, Long gradeId) {
+    public List<PlayListVideoDto> getLikedVideosByUser2(String authorizationHeader) {
         Long userId = getUserIdFromAuthorizationHeader(authorizationHeader);
-        List<Long> videoIds = watchedVideoRepo.findVideoIdsByUserIdAndGradeId(userId, gradeId);
-
+        List<Long> videoIds = watchedVideoRepo.findVideoIdsByUserIdAndGradeId(userId, 1L);
         List<Video> likedVideos = videoRepo.findAllById(videoIds);
 
-        List<VideoDTO> videoDTOs = likedVideos.stream()
-                .map(video -> {
-                    Long userId2 = video.getUser();
-                    User user = userRepo.findById(userId2).orElse(null);
-                    if (user != null) {
-                        String userName = user.getUserName();
-                        String photoUrl = user.getPhotoUrl();
-                        String title = video.getTitle();
-                        byte[] avatarBytes = new byte[0];
-                        try {
-                            avatarBytes = downloadAvaUser(userId2);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                        return new VideoDTO(video, userName, photoUrl, avatarBytes);
-                    }
-                    return null;
-                })
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+        List<PlayListVideoDto> response = new ArrayList<>();
 
-        return videoDTOs;
+        for (Video video : likedVideos) {
+            Optional<User> user = userRepo.findById(video.getUser());
+            response.add(PlayListVideoDto.builder()
+                            .id(video.getId())
+                            .views(video.getViews())
+                            .uri(video.getPath())
+                            .title(video.getTitle())
+                            .description(video.getDescription())
+                            .user(UserDto.builder()
+                                    .id(user.get().getId())
+                                    .email(user.get().getEmail())
+                                    .photoUrl(user.get().getPhotoUrl())
+                                    .displayName(user.get().getUserName())
+                                    .build())
+                    .build());
+        }
+
+        return response;
     }
 
     public static byte[] downloadAvaUser(Long id) throws IOException {
